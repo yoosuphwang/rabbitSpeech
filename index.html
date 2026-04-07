@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>말하는 토끼 친구 🐰</title>
+<title>Talk with Bunny 🐰</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
 
@@ -17,7 +17,6 @@
     position: relative;
   }
 
-  /* Floating decorations */
   .deco {
     position: fixed;
     font-size: 24px;
@@ -48,7 +47,6 @@
     z-index: 1;
   }
 
-  /* Header */
   .header {
     text-align: center;
     margin-bottom: 16px;
@@ -64,7 +62,6 @@
     margin-top: 2px;
   }
 
-  /* Bunny character */
   .bunny-wrap {
     display: flex;
     justify-content: center;
@@ -135,7 +132,6 @@
     transform: rotate(15deg);
   }
 
-  /* Speech bubble */
   .speech-bubble {
     background: #FFF;
     border: 3px solid #FFD1DC;
@@ -166,7 +162,6 @@
     font-size: 18px;
   }
 
-  /* Big buttons */
   .btn-row {
     display: flex;
     gap: 14px;
@@ -222,7 +217,6 @@
     50% { box-shadow: 0 0 0 15px rgba(155,127,212,0); }
   }
 
-  /* Text input area */
   .input-section {
     background: #FFF;
     border: 3px solid #E8D4F0;
@@ -253,7 +247,13 @@
   }
   .input-section textarea::placeholder { color: #D4B8E8; }
 
-  /* Word cards */
+  .section-title {
+    text-align: center;
+    font-size: 17px;
+    color: #D4739A;
+    margin-bottom: 10px;
+  }
+
   .word-cards {
     display: flex;
     flex-wrap: wrap;
@@ -280,7 +280,6 @@
     background: #FFF0F5;
   }
 
-  /* Status */
   .status {
     text-align: center;
     font-size: 15px;
@@ -289,7 +288,6 @@
     margin-bottom: 10px;
   }
 
-  /* Not supported */
   .not-supported {
     background: #FFF0F0;
     border: 2px solid #FFB6C1;
@@ -299,13 +297,6 @@
     color: #D4739A;
     font-size: 17px;
     margin: 20px 0;
-  }
-
-  .section-title {
-    text-align: center;
-    font-size: 17px;
-    color: #D4739A;
-    margin-bottom: 10px;
   }
 </style>
 </head>
@@ -322,11 +313,10 @@
 
 <div class="container">
   <div class="header">
-    <h1>🐰 토끼 친구와 말해요!</h1>
-    <p>버튼을 눌러서 이야기해 보세요 💕</p>
+    <h1>🐰 Talk with Bunny!</h1>
+    <p>Press the button and speak English 💕</p>
   </div>
 
-  <!-- Bunny character -->
   <div class="bunny-wrap">
     <div class="bunny" id="bunny">
       <div class="bunny-ear ear-l"><div class="bunny-ear-inner"></div></div>
@@ -343,47 +333,82 @@
     </div>
   </div>
 
-  <!-- Speech bubble -->
   <div class="speech-bubble" id="speechBubble">
-    <span class="placeholder">여기에 내가 한 말이 나타나요! 🌟</span>
+    <span class="placeholder">What you say will appear here! 🌟</span>
   </div>
 
   <div class="status" id="status"></div>
 
-  <!-- Buttons -->
   <div class="btn-row">
     <button class="big-btn btn-listen" id="btnListen" onclick="toggleListen()">
       <span class="icon">🎤</span>
-      <span id="listenLabel">내 말 듣기</span>
+      <span id="listenLabel">Listen</span>
     </button>
     <button class="big-btn btn-speak" id="btnSpeak" onclick="speakNow()">
       <span class="icon">🔊</span>
-      <span id="speakLabel">말해줘!</span>
+      <span id="speakLabel">Speak!</span>
     </button>
   </div>
 
-  <!-- Text input for TTS -->
   <div class="input-section">
-    <label>✏️ 여기에 쓰면 토끼가 읽어줘요!</label>
-    <textarea id="ttsInput" placeholder="읽어줄 말을 써 보세요~"></textarea>
+    <label>✏️ Type here and Bunny will read it!</label>
+    <textarea id="ttsInput" placeholder="Write something for Bunny~"></textarea>
   </div>
 
-  <!-- Quick word cards -->
-  <div class="section-title">🌈 눌러보세요! 토끼가 말해줘요</div>
-  <div class="word-cards" id="wordCards">
-    <div class="word-card" onclick="speakWord(this)">안녕! 👋</div>
-    <div class="word-card" onclick="speakWord(this)">사랑해 💗</div>
-    <div class="word-card" onclick="speakWord(this)">고마워 🌸</div>
-    <div class="word-card" onclick="speakWord(this)">잘자 🌙</div>
-    <div class="word-card" onclick="speakWord(this)">맛있다 🍰</div>
-    <div class="word-card" onclick="speakWord(this)">예쁘다 🌷</div>
-    <div class="word-card" onclick="speakWord(this)">재밌다 ⭐</div>
-    <div class="word-card" onclick="speakWord(this)">최고! 🏆</div>
+  <!-- Animals & Greetings -->
+  <div class="section-title">🐾 Animals</div>
+  <div class="word-cards">
+    <div class="word-card" onclick="speakWord(this)">Cat 🐱</div>
+    <div class="word-card" onclick="speakWord(this)">Dog 🐶</div>
+    <div class="word-card" onclick="speakWord(this)">Bunny 🐰</div>
+    <div class="word-card" onclick="speakWord(this)">Bird 🐦</div>
+    <div class="word-card" onclick="speakWord(this)">Fish 🐟</div>
+    <div class="word-card" onclick="speakWord(this)">Bear 🧸</div>
+  </div>
+
+  <div class="section-title">👋 Say Hello!</div>
+  <div class="word-cards">
+    <div class="word-card" onclick="speakWord(this)">Hello! 👋</div>
+    <div class="word-card" onclick="speakWord(this)">Thank you 🌸</div>
+    <div class="word-card" onclick="speakWord(this)">I love you 💗</div>
+    <div class="word-card" onclick="speakWord(this)">Good night 🌙</div>
+    <div class="word-card" onclick="speakWord(this)">Please 🙏</div>
+    <div class="word-card" onclick="speakWord(this)">Sorry 💕</div>
+  </div>
+
+  <div class="section-title">🌈 Colors</div>
+  <div class="word-cards">
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#FF6B6B;color:#FF6B6B;">Red ❤️</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#FFA500;color:#FFA500;">Orange 🧡</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#FFD700;color:#C5A000;">Yellow 💛</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#4CAF50;color:#4CAF50;">Green 💚</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#42A5F5;color:#42A5F5;">Blue 💙</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#CE93D8;color:#AB47BC;">Purple 💜</div>
+    <div class="word-card" onclick="speakWord(this)" style="border-color:#FF69B4;color:#FF69B4;">Pink 🩷</div>
+  </div>
+
+  <div class="section-title">🍎 Fruits</div>
+  <div class="word-cards">
+    <div class="word-card" onclick="speakWord(this)">Apple 🍎</div>
+    <div class="word-card" onclick="speakWord(this)">Banana 🍌</div>
+    <div class="word-card" onclick="speakWord(this)">Grape 🍇</div>
+    <div class="word-card" onclick="speakWord(this)">Strawberry 🍓</div>
+    <div class="word-card" onclick="speakWord(this)">Watermelon 🍉</div>
+    <div class="word-card" onclick="speakWord(this)">Peach 🍑</div>
+  </div>
+
+  <div class="section-title">⭐ Numbers</div>
+  <div class="word-cards">
+    <div class="word-card" onclick="speakWord(this)">One 1️⃣</div>
+    <div class="word-card" onclick="speakWord(this)">Two 2️⃣</div>
+    <div class="word-card" onclick="speakWord(this)">Three 3️⃣</div>
+    <div class="word-card" onclick="speakWord(this)">Four 4️⃣</div>
+    <div class="word-card" onclick="speakWord(this)">Five 5️⃣</div>
   </div>
 
   <div id="notSupported" class="not-supported" style="display:none;">
-    😢 이 브라우저에서는 음성 기능을 사용할 수 없어요.<br>
-    Chrome 브라우저를 사용해 주세요!
+    😢 Speech is not available in this browser.<br>
+    Please use Chrome!
   </div>
 </div>
 
@@ -401,10 +426,9 @@
   const btnSpeak = document.getElementById('btnSpeak');
   const listenLabel = document.getElementById('listenLabel');
   const speakLabel = document.getElementById('speakLabel');
-  const status = document.getElementById('status');
+  const statusEl = document.getElementById('status');
   const ttsInput = document.getElementById('ttsInput');
 
-  // Check support
   if (!SpeechRecognition) {
     document.getElementById('notSupported').style.display = 'block';
     btnListen.style.opacity = 0.4;
@@ -413,7 +437,7 @@
 
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.lang = 'ko-KR';
+    recognition.lang = 'en-US';
     recognition.interimResults = true;
     recognition.continuous = false;
 
@@ -422,7 +446,7 @@
       for (let i = 0; i < e.results.length; i++) {
         transcript += e.results[i][0].transcript;
       }
-      bubble.innerHTML = transcript || '<span class="placeholder">듣고 있어요... 🎧</span>';
+      bubble.innerHTML = transcript || '<span class="placeholder">Listening... 🎧</span>';
       if (e.results[e.results.length - 1].isFinal) {
         ttsInput.value = transcript;
       }
@@ -432,24 +456,24 @@
       if (isListening) {
         isListening = false;
         btnListen.classList.remove('recording');
-        listenLabel.textContent = '내 말 듣기';
+        listenLabel.textContent = 'Listen';
         bunny.classList.remove('bounce');
-        status.textContent = '다 들었어요! 🎉';
-        setTimeout(() => { if (status.textContent === '다 들었어요! 🎉') status.textContent = ''; }, 2000);
+        statusEl.textContent = 'Great job! 🎉';
+        setTimeout(() => { if (statusEl.textContent === 'Great job! 🎉') statusEl.textContent = ''; }, 2000);
       }
     };
 
     recognition.onerror = (e) => {
       isListening = false;
       btnListen.classList.remove('recording');
-      listenLabel.textContent = '내 말 듣기';
+      listenLabel.textContent = 'Listen';
       bunny.classList.remove('bounce');
       if (e.error === 'not-allowed') {
-        status.textContent = '🎤 마이크를 허용해 주세요!';
+        statusEl.textContent = '🎤 Please allow microphone!';
       } else if (e.error === 'no-speech') {
-        status.textContent = '소리가 안 들렸어요~ 다시 해볼까요? 🐰';
+        statusEl.textContent = "I couldn't hear you~ Try again? 🐰";
       } else {
-        status.textContent = '앗, 다시 해볼까요? 🌸';
+        statusEl.textContent = 'Oops, try again! 🌸';
       }
     };
   }
@@ -461,44 +485,45 @@
       isListening = false;
       return;
     }
-    // Stop speaking if active
     if (isSpeaking) { synth.cancel(); stopSpeaking(); }
 
     isListening = true;
     btnListen.classList.add('recording');
-    listenLabel.textContent = '듣고 있어요...';
+    listenLabel.textContent = 'Listening...';
     bunny.classList.add('bounce');
-    bubble.innerHTML = '<span class="placeholder">말해 보세요~ 🎧</span>';
-    status.textContent = '귀를 쫑긋 세우고 듣고 있어요! 🐰';
+    bubble.innerHTML = '<span class="placeholder">Say something~ 🎧</span>';
+    statusEl.textContent = 'Bunny is listening! 🐰';
 
     try {
       recognition.start();
-    } catch(e) {
-      // already started
-    }
+    } catch(e) {}
   }
 
   function speakText(text) {
     if (!synth || !text) return;
     synth.cancel();
 
-    const utter = new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ''));
-    utter.lang = 'ko-KR';
-    utter.rate = 0.85;
+    const clean = text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
+    if (!clean) return;
+
+    const utter = new SpeechSynthesisUtterance(clean);
+    utter.lang = 'en-US';
+    utter.rate = 0.8;
     utter.pitch = 1.3;
 
-    // Try to find Korean voice
     const voices = synth.getVoices();
-    const koVoice = voices.find(v => v.lang.startsWith('ko'));
-    if (koVoice) utter.voice = koVoice;
+    const enVoice = voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female'))
+      || voices.find(v => v.lang === 'en-US')
+      || voices.find(v => v.lang.startsWith('en'));
+    if (enVoice) utter.voice = enVoice;
 
     utter.onstart = () => {
       isSpeaking = true;
       btnSpeak.classList.add('speaking');
-      speakLabel.textContent = '말하는 중...';
+      speakLabel.textContent = 'Speaking...';
       mouth.classList.add('talking');
       bunny.classList.add('bounce');
-      status.textContent = '토끼가 말하고 있어요~ 🗣️';
+      statusEl.textContent = 'Bunny is talking~ 🗣️';
     };
 
     utter.onend = () => { stopSpeaking(); };
@@ -510,17 +535,17 @@
   function stopSpeaking() {
     isSpeaking = false;
     btnSpeak.classList.remove('speaking');
-    speakLabel.textContent = '말해줘!';
+    speakLabel.textContent = 'Speak!';
     mouth.classList.remove('talking');
     bunny.classList.remove('bounce');
-    status.textContent = '';
+    statusEl.textContent = '';
   }
 
   function speakNow() {
     const text = ttsInput.value.trim() || bubble.textContent.trim();
-    if (!text || text.includes('여기에') || text.includes('말해 보세요') || text.includes('듣고 있어요')) {
-      status.textContent = '먼저 말하거나 글을 써 주세요! ✏️';
-      setTimeout(() => status.textContent = '', 2000);
+    if (!text || text.includes('will appear') || text.includes('Say something') || text.includes('Listening')) {
+      statusEl.textContent = 'Say something or type first! ✏️';
+      setTimeout(() => statusEl.textContent = '', 2000);
       return;
     }
     bubble.textContent = text;
@@ -534,7 +559,6 @@
     speakText(text);
   }
 
-  // Load voices (some browsers need this)
   if (synth) {
     synth.getVoices();
     speechSynthesis.onvoiceschanged = () => synth.getVoices();

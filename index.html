@@ -1,568 +1,684 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Talk with Bunny 🐰</title>
+<title>말하는 친구들 🐰🐻</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Gaegu',cursive;min-height:100vh;overflow-x:hidden;transition:background .5s}
+  body.theme-ko{background:linear-gradient(180deg,#FFF0F5,#FFE4F0,#FFF0FB)}
+  body.theme-en{background:linear-gradient(180deg,#F0F4FF,#E4EDFF,#F0F8FF)}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  .deco{position:fixed;font-size:24px;animation:floaty 6s ease-in-out infinite;pointer-events:none;z-index:0;opacity:.55}
+  .deco:nth-child(1){top:5%;left:8%}.deco:nth-child(2){top:12%;right:10%;animation-delay:1s;font-size:20px}
+  .deco:nth-child(3){top:30%;left:5%;animation-delay:2s;font-size:18px}.deco:nth-child(4){top:55%;right:6%;animation-delay:.5s}
+  .deco:nth-child(5){top:75%;left:12%;animation-delay:3s;font-size:22px}.deco:nth-child(6){top:85%;right:15%;animation-delay:1.5s;font-size:16px}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-15px) rotate(5deg)}}
 
-  body {
-    font-family: 'Gaegu', cursive;
-    min-height: 100vh;
-    background: linear-gradient(180deg, #FFF0F5, #FFE4F0, #FFF0FB);
-    overflow-x: hidden;
-    position: relative;
-  }
+  .container{max-width:420px;margin:0 auto;padding:16px 16px 40px;position:relative;z-index:1}
 
-  .deco {
-    position: fixed;
-    font-size: 24px;
-    animation: floaty 6s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
-  .deco:nth-child(1) { top: 5%; left: 8%; animation-delay: 0s; }
-  .deco:nth-child(2) { top: 12%; right: 10%; animation-delay: 1s; font-size: 20px; }
-  .deco:nth-child(3) { top: 30%; left: 5%; animation-delay: 2s; font-size: 18px; }
-  .deco:nth-child(4) { top: 55%; right: 6%; animation-delay: 0.5s; }
-  .deco:nth-child(5) { top: 75%; left: 12%; animation-delay: 3s; font-size: 22px; }
-  .deco:nth-child(6) { top: 85%; right: 15%; animation-delay: 1.5s; font-size: 16px; }
-  .deco:nth-child(7) { top: 45%; left: 90%; animation-delay: 2.5s; }
-  .deco:nth-child(8) { top: 65%; left: 3%; animation-delay: 4s; font-size: 20px; }
+  /* Lang toggle */
+  .lang-toggle{display:flex;border-radius:20px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.08);border:3px solid #FFD1DC;transition:border-color .4s}
+  .lang-toggle.en{border-color:#B3D4FF}
+  .lang-btn{flex:1;border:none;padding:12px 10px;font-family:'Gaegu',cursive;font-size:19px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px;background:#FFF;color:#AAA}
+  .lang-btn.active-ko{background:linear-gradient(135deg,#FF9EC6,#FF6FA3);color:#FFF}
+  .lang-btn.active-en{background:linear-gradient(135deg,#7EB6FF,#5B9BF5);color:#FFF}
 
-  @keyframes floaty {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(5deg); }
-  }
+  .header{text-align:center;margin-bottom:10px}
+  .header h1{font-size:25px;text-shadow:1px 1px 0 rgba(255,255,255,.5)}
+  .header p{font-size:14px;margin-top:2px}
+  .theme-ko .header h1{color:#E75480}.theme-ko .header p{color:#D4739A}
+  .theme-en .header h1{color:#4A86D8}.theme-en .header p{color:#6A9FD8}
 
-  .container {
-    max-width: 420px;
-    margin: 0 auto;
-    padding: 20px 16px 40px;
-    position: relative;
-    z-index: 1;
-  }
+  /* ===== Character Stage ===== */
+  .stage{position:relative;height:180px;margin-bottom:14px;overflow:hidden;border-radius:24px}
+  .ground{position:absolute;bottom:0;width:100%;height:45px;border-radius:0 0 24px 24px;transition:background .4s}
+  .theme-ko .ground{background:linear-gradient(0deg,#FFE0EB,#FFF0F5)}
+  .theme-en .ground{background:linear-gradient(0deg,#D4E8FF,#EAF2FF)}
 
-  .header {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .header h1 {
-    font-size: 28px;
-    color: #E75480;
-    text-shadow: 1px 1px 0 #FFB6C1;
-  }
-  .header p {
-    font-size: 16px;
-    color: #D4739A;
-    margin-top: 2px;
-  }
+  /* Scrolling ground lines */
+  .ground-lines{position:absolute;bottom:0;width:200%;height:45px;display:flex;align-items:center;gap:40px;opacity:.3}
+  .ground-lines span{display:block;width:30px;height:3px;border-radius:2px;flex-shrink:0;transition:background .4s}
+  .theme-ko .ground-lines span{background:#E75480}
+  .theme-en .ground-lines span{background:#4A86D8}
 
-  .bunny-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  .bunny {
-    width: 140px;
-    height: 140px;
-    position: relative;
-    transition: transform 0.3s;
-  }
-  .bunny.bounce {
-    animation: bunnyBounce 0.5s ease infinite;
-  }
-  @keyframes bunnyBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  .bunny-body {
-    width: 100px; height: 100px;
-    background: #FFF;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 4px 15px rgba(231,84,128,0.15);
-    border: 3px solid #FFD1DC;
-  }
-  .bunny-face { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 100px; text-align: center; }
-  .bunny-eyes { font-size: 18px; letter-spacing: 20px; margin-left: 10px; }
-  .bunny-mouth { font-size: 14px; margin-top: -2px; transition: all 0.3s; }
-  .bunny-mouth.talking { animation: talkAnim 0.3s ease infinite; }
-  @keyframes talkAnim {
-    0%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(1.5); }
-  }
-  .bunny-cheeks {
-    position: absolute;
-    bottom: 38px;
-    width: 16px; height: 10px;
-    background: #FFB6C1;
-    border-radius: 50%;
-    opacity: 0.6;
-  }
-  .cheek-l { left: 18px; }
-  .cheek-r { right: 18px; }
-  .bunny-ear {
-    width: 28px; height: 60px;
-    background: #FFF;
-    border: 3px solid #FFD1DC;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    position: absolute;
-    top: 0;
-  }
-  .bunny-ear-inner {
-    width: 12px; height: 30px;
-    background: #FFD1DC;
-    border-radius: 50%;
-    margin: 12px auto 0;
-  }
-  .ear-l { left: 22px; transform: rotate(-15deg); }
-  .ear-r { right: 22px; transform: rotate(15deg); }
-  .bunny-ribbon {
-    position: absolute;
-    top: 50px;
-    right: 18px;
-    font-size: 24px;
-    transform: rotate(15deg);
-  }
+  /* Particles */
+  .particles{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+  .particle{position:absolute;font-size:16px;opacity:0;pointer-events:none}
 
-  .speech-bubble {
-    background: #FFF;
-    border: 3px solid #FFD1DC;
-    border-radius: 20px;
-    padding: 16px 18px;
-    margin-bottom: 20px;
-    min-height: 80px;
-    position: relative;
-    box-shadow: 0 4px 15px rgba(231,84,128,0.1);
-    font-size: 20px;
-    color: #555;
-    line-height: 1.5;
-    text-align: center;
-  }
-  .speech-bubble::after {
-    content: '';
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0; height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 12px solid #FFD1DC;
-  }
-  .speech-bubble .placeholder {
-    color: #D4A0B0;
-    font-size: 18px;
-  }
+  /* Characters */
+  .char-container{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);transition:opacity .4s}
+  .char-container.hidden{opacity:0;pointer-events:none}
+  .char-container.visible{opacity:1}
 
-  .btn-row {
-    display: flex;
-    gap: 14px;
-    margin-bottom: 16px;
-  }
-  .big-btn {
-    flex: 1;
-    border: none;
-    border-radius: 24px;
-    padding: 20px 10px;
-    font-family: 'Gaegu', cursive;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-    -webkit-user-select: none;
-    user-select: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-  .big-btn:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  .big-btn .icon { font-size: 40px; }
+  .character{width:110px;height:120px;position:relative}
 
-  .btn-listen {
-    background: linear-gradient(135deg, #FF9EC6, #FF6FA3);
-    color: #FFF;
-  }
-  .btn-listen.recording {
-    background: linear-gradient(135deg, #FF6FA3, #E74C7A);
-    animation: pulse 1s ease infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(255,111,163,0.5); }
-    50% { box-shadow: 0 0 0 15px rgba(255,111,163,0); }
-  }
+  /* Bunny */
+  .bunny-body{width:80px;height:80px;background:#FFF;border-radius:50%;position:absolute;bottom:0;left:50%;transform:translateX(-50%);box-shadow:0 4px 12px rgba(231,84,128,.15);border:3px solid #FFD1DC}
+  .bunny-face{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:80px;text-align:center}
+  .bunny-eyes{font-size:15px;letter-spacing:16px;margin-left:8px;transition:all .2s}
+  .bunny-mouth{font-size:12px;margin-top:-2px;transition:all .2s}
+  .bunny-cheeks{position:absolute;bottom:30px;width:14px;height:9px;background:#FFB6C1;border-radius:50%;opacity:.5;transition:all .3s}
+  .cheek-l{left:12px}.cheek-r{right:12px}
+  .bunny-ear{width:24px;height:50px;background:#FFF;border:3px solid #FFD1DC;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;position:absolute;top:0;transition:transform .15s;transform-origin:bottom center}
+  .bunny-ear-inner{width:10px;height:25px;background:#FFD1DC;border-radius:50%;margin:10px auto 0}
+  .ear-l{left:18px;transform:rotate(-15deg)}.ear-r{right:18px;transform:rotate(15deg)}
+  .bunny-ribbon{position:absolute;top:40px;right:14px;font-size:20px;transform:rotate(15deg);transition:transform .15s}
 
-  .btn-speak {
-    background: linear-gradient(135deg, #B19CD9, #9B7FD4);
-    color: #FFF;
-  }
-  .btn-speak.speaking {
-    background: linear-gradient(135deg, #9B7FD4, #7E5DC4);
-    animation: pulse2 1s ease infinite;
-  }
-  @keyframes pulse2 {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(155,127,212,0.5); }
-    50% { box-shadow: 0 0 0 15px rgba(155,127,212,0); }
-  }
+  /* Bear */
+  .bear-body{width:85px;height:82px;background:#D2E9FF;border-radius:50%;position:absolute;bottom:0;left:50%;transform:translateX(-50%);box-shadow:0 4px 12px rgba(74,134,216,.15);border:3px solid #B3D4FF}
+  .bear-face{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:85px;text-align:center}
+  .bear-eyes{font-size:14px;letter-spacing:18px;margin-left:8px;transition:all .2s}
+  .bear-nose{width:12px;height:8px;background:#7EB6FF;border-radius:50%;margin:1px auto 0}
+  .bear-mouth{font-size:11px;transition:all .2s}
+  .bear-cheeks{position:absolute;bottom:28px;width:14px;height:9px;background:#B3D4FF;border-radius:50%;opacity:.4;transition:all .3s}
+  .bear-cheek-l{left:14px}.bear-cheek-r{right:14px}
+  .bear-ear{width:30px;height:30px;background:#D2E9FF;border:3px solid #B3D4FF;border-radius:50%;position:absolute;top:6px;transition:transform .15s;transform-origin:bottom center}
+  .bear-ear-inner{width:14px;height:14px;background:#B3D4FF;border-radius:50%;margin:5px auto 0}
+  .bear-ear-l{left:10px}.bear-ear-r{right:10px}
+  .bear-hat{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:24px;transition:transform .15s}
 
-  .input-section {
-    background: #FFF;
-    border: 3px solid #E8D4F0;
-    border-radius: 20px;
-    padding: 14px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 15px rgba(177,156,217,0.1);
-  }
-  .input-section label {
-    font-size: 16px;
-    color: #9B7FD4;
-    display: block;
-    margin-bottom: 8px;
-    text-align: center;
-  }
-  .input-section textarea {
-    width: 100%;
-    border: 2px dashed #E8D4F0;
-    border-radius: 14px;
-    padding: 12px;
-    font-family: 'Gaegu', cursive;
-    font-size: 18px;
-    color: #555;
-    resize: none;
-    height: 70px;
-    outline: none;
-    background: #FDF8FF;
-  }
-  .input-section textarea::placeholder { color: #D4B8E8; }
+  /* Volume meter */
+  .vol-meter{position:absolute;top:10px;right:12px;display:flex;gap:3px;align-items:flex-end;height:30px;opacity:0;transition:opacity .3s}
+  .vol-meter.active{opacity:1}
+  .vol-bar{width:5px;border-radius:3px;transition:height .1s,background .4s}
+  .theme-ko .vol-bar{background:#FF9EC6}
+  .theme-en .vol-bar{background:#7EB6FF}
 
-  .section-title {
-    text-align: center;
-    font-size: 17px;
-    color: #D4739A;
-    margin-bottom: 10px;
-  }
+  /* Speech bubble */
+  .speech-bubble{background:#FFF;border-radius:20px;padding:14px 16px;margin-bottom:14px;min-height:65px;position:relative;font-size:19px;color:#555;line-height:1.5;text-align:center;transition:border-color .4s,box-shadow .4s}
+  .theme-ko .speech-bubble{border:3px solid #FFD1DC;box-shadow:0 4px 12px rgba(231,84,128,.1)}
+  .theme-en .speech-bubble{border:3px solid #B3D4FF;box-shadow:0 4px 12px rgba(74,134,216,.1)}
+  .speech-bubble::after{content:'';position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;transition:border-bottom-color .4s}
+  .theme-ko .speech-bubble::after{border-bottom:11px solid #FFD1DC}
+  .theme-en .speech-bubble::after{border-bottom:11px solid #B3D4FF}
+  .placeholder{font-size:17px}.theme-ko .placeholder{color:#D4A0B0}.theme-en .placeholder{color:#A0B8D0}
 
-  .word-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  .word-card {
-    background: #FFF;
-    border: 2.5px solid #FFD1DC;
-    border-radius: 16px;
-    padding: 12px 18px;
-    font-size: 20px;
-    font-weight: 700;
-    color: #E75480;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 3px 8px rgba(231,84,128,0.1);
-    -webkit-user-select: none;
-    user-select: none;
-  }
-  .word-card:active {
-    transform: scale(0.92);
-    background: #FFF0F5;
-  }
+  .status{text-align:center;font-size:14px;min-height:20px;margin-bottom:8px}
+  .theme-ko .status{color:#D4739A}.theme-en .status{color:#6A9FD8}
 
-  .status {
-    text-align: center;
-    font-size: 15px;
-    color: #D4739A;
-    min-height: 24px;
-    margin-bottom: 10px;
-  }
+  /* Buttons */
+  .btn-row{display:flex;gap:10px;margin-bottom:12px}
+  .big-btn{flex:1;border:none;border-radius:22px;padding:14px 8px;font-family:'Gaegu',cursive;font-size:16px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s;user-select:none;box-shadow:0 4px 12px rgba(0,0,0,.08);color:#FFF}
+  .big-btn:active{transform:scale(.95)}
+  .big-btn .icon{font-size:30px}
+  .theme-ko .btn-listen{background:linear-gradient(135deg,#FF9EC6,#FF6FA3)}
+  .theme-ko .btn-speak{background:linear-gradient(135deg,#B19CD9,#9B7FD4)}
+  .theme-ko .btn-replay{background:linear-gradient(135deg,#FFB347,#FFA020)}
+  .theme-en .btn-listen{background:linear-gradient(135deg,#7EB6FF,#5B9BF5)}
+  .theme-en .btn-speak{background:linear-gradient(135deg,#82D9A5,#5BBF83)}
+  .theme-en .btn-replay{background:linear-gradient(135deg,#FFB347,#FFA020)}
+  .btn-listen.recording{animation:pulse 1s ease infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,111,163,.5)}50%{box-shadow:0 0 0 12px rgba(255,111,163,0)}}
 
-  .not-supported {
-    background: #FFF0F0;
-    border: 2px solid #FFB6C1;
-    border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    color: #D4739A;
-    font-size: 17px;
-    margin: 20px 0;
-  }
+  /* Input */
+  .input-section{background:#FFF;border-radius:18px;padding:12px;margin-bottom:14px;transition:border-color .4s}
+  .theme-ko .input-section{border:3px solid #E8D4F0}
+  .theme-en .input-section{border:3px solid #B3D4FF}
+  .input-section label{font-size:15px;display:block;margin-bottom:6px;text-align:center}
+  .theme-ko .input-section label{color:#9B7FD4}.theme-en .input-section label{color:#5B9BF5}
+  .input-section textarea{width:100%;border-radius:12px;padding:10px;font-family:'Gaegu',cursive;font-size:17px;color:#555;resize:none;height:58px;outline:none}
+  .theme-ko .input-section textarea{border:2px dashed #E8D4F0;background:#FDF8FF}
+  .theme-en .input-section textarea{border:2px dashed #B3D4FF;background:#F5F9FF}
+
+  .section-title{text-align:center;font-size:16px;margin-bottom:8px}
+  .theme-ko .section-title{color:#D4739A}.theme-en .section-title{color:#5B9BF5}
+
+  .word-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+  .word-card{background:#FFF;border-radius:14px;padding:10px 14px;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;user-select:none}
+  .word-card:active{transform:scale(.92)}
+  .theme-ko .word-card{border:2.5px solid #FFD1DC;color:#E75480;box-shadow:0 2px 6px rgba(231,84,128,.1)}
+  .theme-en .word-card{border:2.5px solid #B3D4FF;color:#4A86D8;box-shadow:0 2px 6px rgba(74,134,216,.1)}
+
+  .lang-content{display:none}.lang-content.active{display:block}
+  .not-supported{background:#FFF0F0;border:2px solid #FFB6C1;border-radius:16px;padding:16px;text-align:center;color:#D4739A;font-size:16px;margin:16px 0}
 </style>
 </head>
-<body>
-
-<div class="deco">🌸</div>
-<div class="deco">⭐</div>
-<div class="deco">🎀</div>
-<div class="deco">💕</div>
-<div class="deco">🌷</div>
-<div class="deco">✨</div>
-<div class="deco">🦋</div>
-<div class="deco">🍰</div>
+<body class="theme-ko">
+<div class="deco">🌸</div><div class="deco">⭐</div><div class="deco">🎀</div>
+<div class="deco">💕</div><div class="deco">🌷</div><div class="deco">✨</div>
 
 <div class="container">
-  <div class="header">
-    <h1>🐰 Talk with Bunny!</h1>
-    <p>Press the button and speak English 💕</p>
+  <div class="lang-toggle" id="langToggle">
+    <button class="lang-btn active-ko" id="btnKo" onclick="switchLang('ko')">🐰 한국어</button>
+    <button class="lang-btn" id="btnEn" onclick="switchLang('en')">🐻 English</button>
   </div>
 
-  <div class="bunny-wrap">
-    <div class="bunny" id="bunny">
-      <div class="bunny-ear ear-l"><div class="bunny-ear-inner"></div></div>
-      <div class="bunny-ear ear-r"><div class="bunny-ear-inner"></div></div>
-      <div class="bunny-ribbon">🎀</div>
-      <div class="bunny-body">
-        <div class="bunny-face">
-          <div class="bunny-eyes">• •</div>
-          <div class="bunny-mouth" id="bunnyMouth">ω</div>
+  <div class="header">
+    <h1 id="headerTitle">🐰 토끼와 말해요!</h1>
+    <p id="headerSub">버튼을 눌러서 이야기해 보세요 💕</p>
+  </div>
+
+  <!-- Stage with characters -->
+  <div class="stage" id="stage">
+    <div class="particles" id="particles"></div>
+    <div class="vol-meter" id="volMeter">
+      <div class="vol-bar" id="vb0" style="height:4px"></div>
+      <div class="vol-bar" id="vb1" style="height:4px"></div>
+      <div class="vol-bar" id="vb2" style="height:4px"></div>
+      <div class="vol-bar" id="vb3" style="height:4px"></div>
+      <div class="vol-bar" id="vb4" style="height:4px"></div>
+    </div>
+    <div class="ground">
+      <div class="ground-lines" id="groundLines">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <!-- Bunny -->
+    <div class="char-container visible" id="charBunny">
+      <div class="character" id="bunnyChar">
+        <div class="bunny-ear ear-l" id="earL"><div class="bunny-ear-inner"></div></div>
+        <div class="bunny-ear ear-r" id="earR"><div class="bunny-ear-inner"></div></div>
+        <div class="bunny-ribbon" id="ribbon">🎀</div>
+        <div class="bunny-body">
+          <div class="bunny-face">
+            <div class="bunny-eyes" id="bunnyEyes">• •</div>
+            <div class="bunny-mouth" id="bunnyMouth">ω</div>
+          </div>
+          <div class="bunny-cheeks cheek-l" id="bCheekL"></div>
+          <div class="bunny-cheeks cheek-r" id="bCheekR"></div>
         </div>
-        <div class="bunny-cheeks cheek-l"></div>
-        <div class="bunny-cheeks cheek-r"></div>
+      </div>
+    </div>
+    <!-- Bear -->
+    <div class="char-container hidden" id="charBear">
+      <div class="character" id="bearChar">
+        <div class="bear-ear bear-ear-l" id="bearEarL"><div class="bear-ear-inner"></div></div>
+        <div class="bear-ear bear-ear-r" id="bearEarR"><div class="bear-ear-inner"></div></div>
+        <div class="bear-hat" id="bearHat">🎩</div>
+        <div class="bear-body">
+          <div class="bear-face">
+            <div class="bear-eyes" id="bearEyes">• •</div>
+            <div class="bear-nose"></div>
+            <div class="bear-mouth" id="bearMouth">ω</div>
+          </div>
+          <div class="bear-cheeks bear-cheek-l" id="brCheekL"></div>
+          <div class="bear-cheeks bear-cheek-r" id="brCheekR"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="speech-bubble" id="speechBubble">
-    <span class="placeholder">What you say will appear here! 🌟</span>
+    <span class="placeholder" id="placeholderText">여기에 내가 한 말이 나타나요! 🌟</span>
   </div>
-
   <div class="status" id="status"></div>
 
+  <!-- 3 Buttons -->
   <div class="btn-row">
     <button class="big-btn btn-listen" id="btnListen" onclick="toggleListen()">
-      <span class="icon">🎤</span>
-      <span id="listenLabel">Listen</span>
+      <span class="icon">🎤</span><span id="listenLabel">내 말 듣기</span>
+    </button>
+    <button class="big-btn btn-replay" id="btnReplay" onclick="replayRecording()">
+      <span class="icon">🔁</span><span id="replayLabel">다시 듣기</span>
     </button>
     <button class="big-btn btn-speak" id="btnSpeak" onclick="speakNow()">
-      <span class="icon">🔊</span>
-      <span id="speakLabel">Speak!</span>
+      <span class="icon">🔊</span><span id="speakLabel">말해줘!</span>
     </button>
   </div>
 
   <div class="input-section">
-    <label>✏️ Type here and Bunny will read it!</label>
-    <textarea id="ttsInput" placeholder="Write something for Bunny~"></textarea>
+    <label id="inputLabel">✏️ 여기에 쓰면 토끼가 읽어줘요!</label>
+    <textarea id="ttsInput" placeholder="읽어줄 말을 써 보세요~"></textarea>
   </div>
 
-  <!-- Animals & Greetings -->
-  <div class="section-title">🐾 Animals</div>
-  <div class="word-cards">
-    <div class="word-card" onclick="speakWord(this)">Cat 🐱</div>
-    <div class="word-card" onclick="speakWord(this)">Dog 🐶</div>
-    <div class="word-card" onclick="speakWord(this)">Bunny 🐰</div>
-    <div class="word-card" onclick="speakWord(this)">Bird 🐦</div>
-    <div class="word-card" onclick="speakWord(this)">Fish 🐟</div>
-    <div class="word-card" onclick="speakWord(this)">Bear 🧸</div>
+  <!-- Korean Cards -->
+  <div class="lang-content active" id="cardsKo">
+    <div class="section-title">🐾 동물</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">고양이 🐱</div>
+      <div class="word-card" onclick="speakWord(this)">강아지 🐶</div>
+      <div class="word-card" onclick="speakWord(this)">토끼 🐰</div>
+      <div class="word-card" onclick="speakWord(this)">새 🐦</div>
+      <div class="word-card" onclick="speakWord(this)">곰 🧸</div>
+    </div>
+    <div class="section-title">👋 인사</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">안녕! 👋</div>
+      <div class="word-card" onclick="speakWord(this)">고마워 🌸</div>
+      <div class="word-card" onclick="speakWord(this)">사랑해 💗</div>
+      <div class="word-card" onclick="speakWord(this)">잘자 🌙</div>
+      <div class="word-card" onclick="speakWord(this)">최고! 🏆</div>
+    </div>
+    <div class="section-title">🌈 색깔</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FF6B6B;color:#FF6B6B">빨강 ❤️</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FFA500;color:#FFA500">주황 🧡</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#4CAF50;color:#4CAF50">초록 💚</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#42A5F5;color:#42A5F5">파랑 💙</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FF69B4;color:#FF69B4">분홍 🩷</div>
+    </div>
+    <div class="section-title">🍎 과일</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">사과 🍎</div>
+      <div class="word-card" onclick="speakWord(this)">바나나 🍌</div>
+      <div class="word-card" onclick="speakWord(this)">딸기 🍓</div>
+      <div class="word-card" onclick="speakWord(this)">수박 🍉</div>
+      <div class="word-card" onclick="speakWord(this)">복숭아 🍑</div>
+    </div>
+    <div class="section-title">⭐ 숫자</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">하나 1️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">둘 2️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">셋 3️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">넷 4️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">다섯 5️⃣</div>
+    </div>
   </div>
 
-  <div class="section-title">👋 Say Hello!</div>
-  <div class="word-cards">
-    <div class="word-card" onclick="speakWord(this)">Hello! 👋</div>
-    <div class="word-card" onclick="speakWord(this)">Thank you 🌸</div>
-    <div class="word-card" onclick="speakWord(this)">I love you 💗</div>
-    <div class="word-card" onclick="speakWord(this)">Good night 🌙</div>
-    <div class="word-card" onclick="speakWord(this)">Please 🙏</div>
-    <div class="word-card" onclick="speakWord(this)">Sorry 💕</div>
+  <!-- English Cards -->
+  <div class="lang-content" id="cardsEn">
+    <div class="section-title">🐾 Animals</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">Cat 🐱</div>
+      <div class="word-card" onclick="speakWord(this)">Dog 🐶</div>
+      <div class="word-card" onclick="speakWord(this)">Bunny 🐰</div>
+      <div class="word-card" onclick="speakWord(this)">Bird 🐦</div>
+      <div class="word-card" onclick="speakWord(this)">Bear 🧸</div>
+    </div>
+    <div class="section-title">👋 Greetings</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">Hello! 👋</div>
+      <div class="word-card" onclick="speakWord(this)">Thank you 🌸</div>
+      <div class="word-card" onclick="speakWord(this)">I love you 💗</div>
+      <div class="word-card" onclick="speakWord(this)">Good night 🌙</div>
+      <div class="word-card" onclick="speakWord(this)">Please 🙏</div>
+    </div>
+    <div class="section-title">🌈 Colors</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FF6B6B;color:#FF6B6B">Red ❤️</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FFA500;color:#FFA500">Orange 🧡</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#4CAF50;color:#4CAF50">Green 💚</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#42A5F5;color:#42A5F5">Blue 💙</div>
+      <div class="word-card" onclick="speakWord(this)" style="border-color:#FF69B4;color:#FF69B4">Pink 🩷</div>
+    </div>
+    <div class="section-title">🍎 Fruits</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">Apple 🍎</div>
+      <div class="word-card" onclick="speakWord(this)">Banana 🍌</div>
+      <div class="word-card" onclick="speakWord(this)">Strawberry 🍓</div>
+      <div class="word-card" onclick="speakWord(this)">Watermelon 🍉</div>
+      <div class="word-card" onclick="speakWord(this)">Peach 🍑</div>
+    </div>
+    <div class="section-title">⭐ Numbers</div>
+    <div class="word-cards">
+      <div class="word-card" onclick="speakWord(this)">One 1️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">Two 2️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">Three 3️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">Four 4️⃣</div>
+      <div class="word-card" onclick="speakWord(this)">Five 5️⃣</div>
+    </div>
   </div>
 
-  <div class="section-title">🌈 Colors</div>
-  <div class="word-cards">
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#FF6B6B;color:#FF6B6B;">Red ❤️</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#FFA500;color:#FFA500;">Orange 🧡</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#FFD700;color:#C5A000;">Yellow 💛</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#4CAF50;color:#4CAF50;">Green 💚</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#42A5F5;color:#42A5F5;">Blue 💙</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#CE93D8;color:#AB47BC;">Purple 💜</div>
-    <div class="word-card" onclick="speakWord(this)" style="border-color:#FF69B4;color:#FF69B4;">Pink 🩷</div>
-  </div>
-
-  <div class="section-title">🍎 Fruits</div>
-  <div class="word-cards">
-    <div class="word-card" onclick="speakWord(this)">Apple 🍎</div>
-    <div class="word-card" onclick="speakWord(this)">Banana 🍌</div>
-    <div class="word-card" onclick="speakWord(this)">Grape 🍇</div>
-    <div class="word-card" onclick="speakWord(this)">Strawberry 🍓</div>
-    <div class="word-card" onclick="speakWord(this)">Watermelon 🍉</div>
-    <div class="word-card" onclick="speakWord(this)">Peach 🍑</div>
-  </div>
-
-  <div class="section-title">⭐ Numbers</div>
-  <div class="word-cards">
-    <div class="word-card" onclick="speakWord(this)">One 1️⃣</div>
-    <div class="word-card" onclick="speakWord(this)">Two 2️⃣</div>
-    <div class="word-card" onclick="speakWord(this)">Three 3️⃣</div>
-    <div class="word-card" onclick="speakWord(this)">Four 4️⃣</div>
-    <div class="word-card" onclick="speakWord(this)">Five 5️⃣</div>
-  </div>
-
-  <div id="notSupported" class="not-supported" style="display:none;">
-    😢 Speech is not available in this browser.<br>
-    Please use Chrome!
-  </div>
+  <div id="notSupported" class="not-supported" style="display:none">😢 이 브라우저에서는 음성 기능을 사용할 수 없어요.<br>Chrome 브라우저를 사용해 주세요!</div>
 </div>
 
 <script>
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const synth = window.speechSynthesis;
-  let recognition = null;
-  let isListening = false;
-  let isSpeaking = false;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const synth = window.speechSynthesis;
+let recognition=null, isListening=false, isSpeaking=false, currentLang='ko';
+let mediaRecorder=null, audioChunks=[], recordedBlob=null, audioCtx=null, analyser=null, micStream=null, animId=null;
 
-  const bubble = document.getElementById('speechBubble');
-  const bunny = document.getElementById('bunny');
-  const mouth = document.getElementById('bunnyMouth');
-  const btnListen = document.getElementById('btnListen');
-  const btnSpeak = document.getElementById('btnSpeak');
-  const listenLabel = document.getElementById('listenLabel');
-  const speakLabel = document.getElementById('speakLabel');
-  const statusEl = document.getElementById('status');
-  const ttsInput = document.getElementById('ttsInput');
+const $=id=>document.getElementById(id);
+const bubble=$('speechBubble'), statusEl=$('status'), ttsInput=$('ttsInput');
+const btnListen=$('btnListen'), btnSpeak=$('btnSpeak'), btnReplay=$('btnReplay');
+const listenLabel=$('listenLabel'), speakLabel=$('speakLabel'), replayLabel=$('replayLabel');
+const volMeter=$('volMeter'), groundLines=$('groundLines'), particlesEl=$('particles');
+const bars=[0,1,2,3,4].map(i=>$('vb'+i));
 
-  if (!SpeechRecognition) {
-    document.getElementById('notSupported').style.display = 'block';
-    btnListen.style.opacity = 0.4;
-    btnListen.onclick = null;
+const charEls={
+  ko:{container:$('charBunny'),char:$('bunnyChar'),mouth:$('bunnyMouth'),eyes:$('bunnyEyes'),
+      earL:$('earL'),earR:$('earR'),ribbon:$('ribbon'),cheekL:$('bCheekL'),cheekR:$('bCheekR')},
+  en:{container:$('charBear'),char:$('bearChar'),mouth:$('bearMouth'),eyes:$('bearEyes'),
+      earL:$('bearEarL'),earR:$('bearEarR'),hat:$('bearHat'),cheekL:$('brCheekL'),cheekR:$('brCheekR')}
+};
+
+const txt={
+  ko:{title:'🐰 토끼와 말해요!',sub:'버튼을 눌러서 이야기해 보세요 💕',
+    placeholder:'여기에 내가 한 말이 나타나요! 🌟',
+    listen:'내 말 듣기',listening:'듣고 있어요...',speak:'말해줘!',speaking:'말하는 중...',
+    replay:'다시 듣기',replaying:'재생 중...',
+    inputLabel:'✏️ 여기에 쓰면 토끼가 읽어줘요!',inputPlaceholder:'읽어줄 말을 써 보세요~',
+    statusListen:'토끼가 귀를 쫑긋! 🐰',statusDone:'잘 들었어요! 🎉',statusTalk:'토끼가 말하고 있어요~ 🗣️',
+    statusNoInput:'먼저 말하거나 글을 써 주세요! ✏️',statusMic:'🎤 마이크를 허용해 주세요!',
+    statusNoSpeech:'소리가 안 들렸어요~ 다시 해볼까요? 🐰',statusError:'앗, 다시 해볼까요? 🌸',
+    bubbleListening:'말해 보세요~ 🎧',statusReplay:'내 목소리를 듣고 있어요! 🎵',statusNoRec:'먼저 녹음해 주세요! 🎤'},
+  en:{title:'🐻 Talk with Bear!',sub:'Press the button and speak English 💙',
+    placeholder:'What you say will appear here! 🌟',
+    listen:'Listen',listening:'Listening...',speak:'Speak!',speaking:'Speaking...',
+    replay:'Replay',replaying:'Playing...',
+    inputLabel:'✏️ Type here and Bear will read it!',inputPlaceholder:'Write something for Bear~',
+    statusListen:'Bear is listening! 🐻',statusDone:'Great job! 🎉',statusTalk:'Bear is talking~ 🗣️',
+    statusNoInput:'Say something or type first! ✏️',statusMic:'🎤 Please allow microphone!',
+    statusNoSpeech:"Couldn't hear you~ Try again? 🐻",statusError:'Oops, try again! 🌸',
+    bubbleListening:'Say something~ 🎧',statusReplay:'Listening to your voice! 🎵',statusNoRec:'Record first! 🎤'}
+};
+
+const particleEmojis={ko:['💗','🌸','⭐','✨','🎀','💕'],en:['💙','⭐','✨','🎩','💫','🌟']};
+
+// === Language Switch ===
+function switchLang(lang){
+  if(isSpeaking){synth.cancel();stopSpeaking()}
+  if(isListening&&recognition){recognition.stop();isListening=false;stopAudioAnalysis()}
+  currentLang=lang;
+  document.body.className='theme-'+lang;
+  $('langToggle').className='lang-toggle '+lang;
+  $('btnKo').className='lang-btn'+(lang==='ko'?' active-ko':'');
+  $('btnEn').className='lang-btn'+(lang==='en'?' active-en':'');
+  charEls.ko.container.className='char-container '+(lang==='ko'?'visible':'hidden');
+  charEls.en.container.className='char-container '+(lang==='en'?'visible':'hidden');
+  const t=txt[lang];
+  $('headerTitle').textContent=t.title;$('headerSub').textContent=t.sub;
+  bubble.innerHTML='<span class="placeholder">'+t.placeholder+'</span>';
+  listenLabel.textContent=t.listen;speakLabel.textContent=t.speak;replayLabel.textContent=t.replay;
+  $('inputLabel').textContent=t.inputLabel;ttsInput.placeholder=t.inputPlaceholder;
+  statusEl.textContent='';btnListen.classList.remove('recording');
+  $('cardsKo').classList.toggle('active',lang==='ko');
+  $('cardsEn').classList.toggle('active',lang==='en');
+  if(recognition)recognition.lang=lang==='ko'?'ko-KR':'en-US';
+  recordedBlob=null;audioChunks=[];
+}
+
+// === Audio Analysis (volume-based animation) ===
+function startAudioAnalysis(stream){
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=256;
+  const src=audioCtx.createMediaStreamSource(stream);
+  src.connect(analyser);
+  const data=new Uint8Array(analyser.frequencyBinCount);
+  volMeter.classList.add('active');
+  let groundX=0;
+
+  function loop(){
+    analyser.getByteFrequencyData(data);
+    let sum=0;for(let i=0;i<data.length;i++)sum+=data[i];
+    const avg=sum/data.length;
+    const level=Math.min(avg/80,1); // 0~1
+
+    // Volume bars
+    bars.forEach((b,i)=>{
+      const h=4+level*(22+Math.sin(Date.now()/100+i*1.2)*8);
+      b.style.height=h+'px';
+    });
+
+    // Ground scroll speed
+    groundX-=level*6+0.5;
+    groundLines.style.transform='translateX('+groundX%80+'px)';
+
+    // Character animation
+    const c=charEls[currentLang];
+    const charEl=c.char;
+
+    // Bounce height
+    const bounce=Math.sin(Date.now()/(200-level*120))*( 4+level*16);
+    charEl.style.transform='translateY('+bounce+'px)';
+
+    // Ears flap
+    const earFlap=Math.sin(Date.now()/150)*level*20;
+    if(c.earL){c.earL.style.transform='rotate('+ (-15+earFlap)+'deg)'}
+    if(c.earR){c.earR.style.transform='rotate('+ (15-earFlap)+'deg)'}
+
+    // Accessory wobble
+    if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(Date.now()/120)*level*15)+'deg)';
+    if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(Date.now()/120)*level*12)+'deg)';
+
+    // Cheek blush
+    const blush=0.4+level*0.5;
+    c.cheekL.style.opacity=blush;c.cheekR.style.opacity=blush;
+
+    // Mouth
+    const mouthScale=1+level*0.8;
+    c.mouth.style.transform='scaleY('+mouthScale+')';
+    if(level>0.5)c.mouth.textContent='○';
+    else if(level>0.2)c.mouth.textContent='o';
+    else c.mouth.textContent='ω';
+
+    // Eyes squint when loud
+    if(level>0.6)c.eyes.textContent='> <';
+    else if(level>0.3)c.eyes.textContent='^ ^';
+    else c.eyes.textContent='• •';
+
+    // Particles
+    if(level>0.4&&Math.random()<level*0.3)spawnParticle();
+
+    animId=requestAnimationFrame(loop);
   }
+  loop();
+}
 
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = true;
-    recognition.continuous = false;
+function stopAudioAnalysis(){
+  if(animId){cancelAnimationFrame(animId);animId=null}
+  volMeter.classList.remove('active');
+  bars.forEach(b=>b.style.height='4px');
+  groundLines.style.transform='translateX(0)';
+  // Reset character
+  ['ko','en'].forEach(l=>{
+    const c=charEls[l];
+    c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
+    c.cheekL.style.opacity='';c.cheekR.style.opacity='';c.mouth.style.transform='';
+    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
+    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
+    if(c.hat)c.hat.style.transform='translateX(-50%)';
+  });
+  if(audioCtx){audioCtx.close();audioCtx=null}
+}
 
-    recognition.onresult = (e) => {
-      let transcript = '';
-      for (let i = 0; i < e.results.length; i++) {
-        transcript += e.results[i][0].transcript;
-      }
-      bubble.innerHTML = transcript || '<span class="placeholder">Listening... 🎧</span>';
-      if (e.results[e.results.length - 1].isFinal) {
-        ttsInput.value = transcript;
-      }
-    };
-
-    recognition.onend = () => {
-      if (isListening) {
-        isListening = false;
-        btnListen.classList.remove('recording');
-        listenLabel.textContent = 'Listen';
-        bunny.classList.remove('bounce');
-        statusEl.textContent = 'Great job! 🎉';
-        setTimeout(() => { if (statusEl.textContent === 'Great job! 🎉') statusEl.textContent = ''; }, 2000);
-      }
-    };
-
-    recognition.onerror = (e) => {
-      isListening = false;
-      btnListen.classList.remove('recording');
-      listenLabel.textContent = 'Listen';
-      bunny.classList.remove('bounce');
-      if (e.error === 'not-allowed') {
-        statusEl.textContent = '🎤 Please allow microphone!';
-      } else if (e.error === 'no-speech') {
-        statusEl.textContent = "I couldn't hear you~ Try again? 🐰";
-      } else {
-        statusEl.textContent = 'Oops, try again! 🌸';
-      }
-    };
+// === Particles ===
+function spawnParticle(){
+  const el=document.createElement('div');
+  el.className='particle';
+  el.textContent=particleEmojis[currentLang][Math.floor(Math.random()*particleEmojis[currentLang].length)];
+  el.style.left=(20+Math.random()*60)+'%';
+  el.style.bottom='50px';
+  el.style.fontSize=(14+Math.random()*10)+'px';
+  particlesEl.appendChild(el);
+  let y=0,x=0,o=1;
+  const dx=(Math.random()-0.5)*2;
+  function rise(){
+    y+=1.5;x+=dx;o-=0.015;
+    el.style.transform='translateY(-'+y+'px) translateX('+x+'px) rotate('+(x*3)+'deg)';
+    el.style.opacity=Math.max(0,o);
+    if(o>0)requestAnimationFrame(rise);
+    else el.remove();
   }
+  requestAnimationFrame(rise);
+}
 
-  function toggleListen() {
-    if (!recognition) return;
-    if (isListening) {
-      recognition.stop();
-      isListening = false;
-      return;
+// === Speech Recognition + MediaRecorder ===
+if(!SR){$('notSupported').style.display='block';btnListen.style.opacity=.4;btnListen.onclick=null}
+
+if(SR){
+  recognition=new SR();recognition.lang='ko-KR';recognition.interimResults=true;recognition.continuous=false;
+
+  recognition.onresult=e=>{
+    let tr='';for(let i=0;i<e.results.length;i++)tr+=e.results[i][0].transcript;
+    bubble.innerHTML=tr||'<span class="placeholder">'+txt[currentLang].bubbleListening+'</span>';
+    if(e.results[e.results.length-1].isFinal)ttsInput.value=tr;
+  };
+  recognition.onend=()=>{
+    if(isListening){
+      isListening=false;
+      btnListen.classList.remove('recording');listenLabel.textContent=txt[currentLang].listen;
+      stopAudioAnalysis();stopMediaRecorder();
+      statusEl.textContent=txt[currentLang].statusDone;
+      setTimeout(()=>{if(statusEl.textContent===txt[currentLang].statusDone)statusEl.textContent=''},2000);
     }
-    if (isSpeaking) { synth.cancel(); stopSpeaking(); }
+  };
+  recognition.onerror=e=>{
+    isListening=false;btnListen.classList.remove('recording');listenLabel.textContent=txt[currentLang].listen;
+    stopAudioAnalysis();stopMediaRecorder();
+    const t=txt[currentLang];
+    if(e.error==='not-allowed')statusEl.textContent=t.statusMic;
+    else if(e.error==='no-speech')statusEl.textContent=t.statusNoSpeech;
+    else statusEl.textContent=t.statusError;
+  };
+}
 
-    isListening = true;
-    btnListen.classList.add('recording');
-    listenLabel.textContent = 'Listening...';
-    bunny.classList.add('bounce');
-    bubble.innerHTML = '<span class="placeholder">Say something~ 🎧</span>';
-    statusEl.textContent = 'Bunny is listening! 🐰';
+function stopMediaRecorder(){
+  if(mediaRecorder&&mediaRecorder.state!=='inactive'){mediaRecorder.stop()}
+}
 
-    try {
-      recognition.start();
-    } catch(e) {}
+async function toggleListen(){
+  if(!recognition)return;
+  if(isListening){recognition.stop();isListening=false;return}
+  if(isSpeaking){synth.cancel();stopSpeaking()}
+
+  try{
+    micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(e){statusEl.textContent=txt[currentLang].statusMic;return}
+
+  // Start MediaRecorder
+  audioChunks=[];recordedBlob=null;
+  mediaRecorder=new MediaRecorder(micStream);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data)};
+  mediaRecorder.onstop=()=>{
+    recordedBlob=new Blob(audioChunks,{type:'audio/webm'});
+    micStream.getTracks().forEach(t=>t.stop());
+  };
+  mediaRecorder.start();
+
+  // Start audio analysis
+  startAudioAnalysis(micStream);
+
+  // Start recognition
+  isListening=true;
+  btnListen.classList.add('recording');
+  listenLabel.textContent=txt[currentLang].listening;
+  bubble.innerHTML='<span class="placeholder">'+txt[currentLang].bubbleListening+'</span>';
+  statusEl.textContent=txt[currentLang].statusListen;
+
+  try{recognition.start()}catch(e){}
+}
+
+// === Replay Recording ===
+function replayRecording(){
+  if(!recordedBlob){
+    statusEl.textContent=txt[currentLang].statusNoRec;
+    setTimeout(()=>statusEl.textContent='',2000);return;
+  }
+  const url=URL.createObjectURL(recordedBlob);
+  const audio=new Audio(url);
+
+  // Use audio element for analysis during playback
+  const ctx=new(window.AudioContext||window.webkitAudioContext)();
+  const src=ctx.createMediaElementSource(audio);
+  const ana=ctx.createAnalyser();ana.fftSize=256;
+  src.connect(ana);src.connect(ctx.destination);
+  const data=new Uint8Array(ana.frequencyBinCount);
+
+  statusEl.textContent=txt[currentLang].statusReplay;
+  replayLabel.textContent=txt[currentLang].replaying;
+  let rId;
+
+  function loop(){
+    ana.getByteFrequencyData(data);
+    let sum=0;for(let i=0;i<data.length;i++)sum+=data[i];
+    const level=Math.min((sum/data.length)/80,1);
+    const c=charEls[currentLang];
+    const bounce=Math.sin(Date.now()/(200-level*120))*(4+level*16);
+    c.char.style.transform='translateY('+bounce+'px)';
+    const earFlap=Math.sin(Date.now()/150)*level*20;
+    if(c.earL)c.earL.style.transform='rotate('+(-15+earFlap)+'deg)';
+    if(c.earR)c.earR.style.transform='rotate('+(15-earFlap)+'deg)';
+    if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(Date.now()/120)*level*15)+'deg)';
+    if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(Date.now()/120)*level*12)+'deg)';
+    c.cheekL.style.opacity=0.4+level*0.5;c.cheekR.style.opacity=0.4+level*0.5;
+    const ms=1+level*0.8;c.mouth.style.transform='scaleY('+ms+')';
+    c.mouth.textContent=level>0.5?'○':level>0.2?'o':'ω';
+    c.eyes.textContent=level>0.6?'> <':level>0.3?'^ ^':'• •';
+    bars.forEach((b,i)=>b.style.height=(4+level*(22+Math.sin(Date.now()/100+i*1.2)*8))+'px');
+    if(level>0.4&&Math.random()<level*0.3)spacle();
+    rId=requestAnimationFrame(loop);
   }
 
-  function speakText(text) {
-    if (!synth || !text) return;
-    synth.cancel();
+  volMeter.classList.add('active');
+  audio.play();loop();
 
-    const clean = text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
-    if (!clean) return;
+  audio.onended=()=>{
+    cancelAnimationFrame(rId);ctx.close();URL.revokeObjectURL(url);
+    volMeter.classList.remove('active');
+    replayLabel.textContent=txt[currentLang].replay;statusEl.textContent='';
+    stopAudioAnalysis();
+    // Reset
+    const c=charEls[currentLang];
+    c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
+    c.cheekL.style.opacity='';c.cheekRe.opacity='';c.mouth.style.transform='';
+    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
+    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
+    if(c.hat)c.hat.style.transform='translateX(-50%)';
+    bars.forEach(b=>b.style.height='4px');
+  };
+}
 
-    const utter = new SpeechSynthesisUtterance(clean);
-    utter.lang = 'en-US';
-    utter.rate = 0.8;
-    utter.pitch = 1.3;
+// === TTS ===
+function speakText(text){
+  if(!synth||!text)return;synth.cancel();
+  const clean=text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu,'').trim();
+  if(!clean)return;
+  const utter=new SpeechSynthesisUtterance(clean);
+  const isEn=currentLang==='en';
+  utter.lang=isEn?'en-US':'ko-KR';utter.rate=isEn?0.8:0.9;utter.pitch=1.3;
+  const voices=synth.getVoices();
+  const lf=isEn?'en-US':'ko-KR',lp=isEn?'en':'ko';
+  const v=voices.find(v=>v.lang===lf&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang===lf)||voices.find(v=>v.lang.startsWith(lp));
+  if(v)utter.voice=v;
 
-    const voices = synth.getVoices();
-    const enVoice = voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('female'))
-      || voices.find(v => v.lang === 'en-US')
-      || voices.find(v => v.lang.startsWith('en'));
-    if (enVoice) utter.voice = enVoice;
-
-    utter.onstart = () => {
-      isSpeaking = true;
-      btnSpeak.classList.add('speaking');
-      speakLabel.textContent = 'Speaking...';
-      mouth.classList.add('talking');
-      bunny.classList.add('bounce');
-      statusEl.textContent = 'Bunny is talking~ 🗣️';
-    };
-
-    utter.onend = () => { stopSpeaking(); };
-    utter.onerror = () => { stopSpeaking(); };
-
-    synth.speak(utter);
-  }
-
-  function stopSpeaking() {
-    isSpeaking = false;
-    btnSpeak.classList.remove('speaking');
-    speakLabel.textContent = 'Speak!';
-    mouth.classList.remove('talking');
-    bunny.classList.remove('bounce');
-    statusEl.textContent = '';
-  }
-
-  function speakNow() {
-    const text = ttsInput.value.trim() || bubble.textContent.trim();
-    if (!text || text.includes('will appear') || text.includes('Say something') || text.includes('Listening')) {
-      statusEl.textContent = 'Say something or type first! ✏️';
-      setTimeout(() => statusEl.textContent = '', 2000);
-      return;
+  const t=txt[currentLang],c=charEls[currentLang];
+  // Simple TTS animation (no analyser available for TTS)
+  let ttsAnimId;
+  utter.onstart=()=>{
+    isSpeaking=true;btnSpeak.classList.add('speaking');speakLabel.textContent=t.speaking;
+    statusEl.textContent=t.statusTalk;
+    function anim(){
+      const t2=Date.now();
+      const bounce=Math.sin(t2/180)*8;
+      c.char.style.transform='translateY('+bounce+'px)';
+      c.mouth.textContent=Math.sin(t2/120)>0?'○':'ω';
+      const ef=Math.sin(t2/150)*10;
+      if(c.earL)c.earL.style.transform='rotate('+(-15+ef)+'deg)';
+   if(c.earR)c.earR.style.transform='rotate('+(15-ef)+'deg)';
+      if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(t2/120)*8)+'deg)';
+      if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(t2/120)*8)+'deg)';
+      ttsAnimId=requestAnimationFrame(anim);
     }
-    bubble.textContent = text;
-    speakText(text);
-  }
+    anim();
+  };
+  utter.onend=()=>{cancelAnimationFrame(ttsAnimId);stopSpeaking()};
+  utter.onerror=()=>{cancelAnimationFrame(ttsAnimId);stopSpeaking()};
+  synth.speak(utter);
+}
 
-  function speakWord(el) {
-    const text = el.textContent;
-    bubble.textContent = text;
-    ttsInput.value = text;
-    speakText(text);
-  }
+function stopSpeaking(){
+  isSpeaking=false;btnSpeak.classList.remove('speaking');speakLabel.textContent=txt[currentLang].speak;
+  statusEl.textContent='';
+  ['ko','en'].forEach(l=>{
+    const c=charEls[l];c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
+    c.cheekL.style.opacity='';c.cheekR.style.opacity='';c.mouth.style.transform='';
+    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
+    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
+    if(c.hat)c.hat.style.transform='translateX(-50  });
+}
 
-  if (synth) {
-    synth.getVoices();
-    speechSynthesis.onvoiceschanged = () => synth.getVoices();
+function speakNow(){
+  const text=ttsInput.value.trim()||bubble.textContent.trim();
+  const t=txt[currentLang];
+  const igs=[t.placeholder,t.bubbleListening];
+  if(!text||igs.some(ig=>text.includes(ig.replace(/[🌟🎧]/g,'').trim()))){
+    statusEl.textContent=t.statusNoInput;setTimeout(()=>statusEl.textContent='',2000);return;
   }
+  bubble.textContent=text;speakText(text);
+}
+
+function speakWord(el){
+  const text=el.textContent;bubble.textContent=text;ttsInput.value=text;speakText(text);
+}
+
+if(syh){synth.getVoices();speechSynthesis.onvoiceschanged=()=>synth.getVoices()}
 </script>
 </body>
 </html>

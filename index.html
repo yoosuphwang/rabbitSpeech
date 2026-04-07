@@ -19,7 +19,6 @@
 
   .container{max-width:420px;margin:0 auto;padding:16px 16px 40px;position:relative;z-index:1}
 
-  /* Lang toggle */
   .lang-toggle{display:flex;border-radius:20px;overflow:hidden;margin-bottom:14px;box-shadow:0 3px 12px rgba(0,0,0,.08);border:3px solid #FFD1DC;transition:border-color .4s}
   .lang-toggle.en{border-color:#B3D4FF}
   .lang-btn{flex:1;border:none;padding:12px 10px;font-family:'Gaegu',cursive;font-size:19px;font-weight:700;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:6px;background:#FFF;color:#AAA}
@@ -32,78 +31,61 @@
   .theme-ko .header h1{color:#E75480}.theme-ko .header p{color:#D4739A}
   .theme-en .header h1{color:#4A86D8}.theme-en .header p{color:#6A9FD8}
 
-  /* ===== Character Stage ===== */
   .stage{position:relative;height:180px;margin-bottom:14px;overflow:hidden;border-radius:24px}
   .ground{position:absolute;bottom:0;width:100%;height:45px;border-radius:0 0 24px 24px;transition:background .4s}
   .theme-ko .ground{background:linear-gradient(0deg,#FFE0EB,#FFF0F5)}
   .theme-en .ground{background:linear-gradient(0deg,#D4E8FF,#EAF2FF)}
-
-  /* Scrolling ground lines */
   .ground-lines{position:absolute;bottom:0;width:200%;height:45px;display:flex;align-items:center;gap:40px;opacity:.3}
   .ground-lines span{display:block;width:30px;height:3px;border-radius:2px;flex-shrink:0;transition:background .4s}
-  .theme-ko .ground-lines span{background:#E75480}
-  .theme-en .ground-lines span{background:#4A86D8}
+  .theme-ko .ground-lines span{background:#E75480}.theme-en .ground-lines span{background:#4A86D8}
 
-  /* Particles */
   .particles{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
   .particle{position:absolute;font-size:16px;opacity:0;pointer-events:none}
 
-  /* Characters */
   .char-container{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);transition:opacity .4s}
-  .char-container.hidden{opacity:0;pointer-events:none}
-  .char-container.visible{opacity:1}
-
+  .char-container.hidden{opacity:0;pointer-events:none}.char-container.visible{opacity:1}
   .character{width:110px;height:120px;position:relative}
 
-  /* Bunny */
   .bunny-body{width:80px;height:80px;background:#FFF;border-radius:50%;position:absolute;bottom:0;left:50%;transform:translateX(-50%);box-shadow:0 4px 12px rgba(231,84,128,.15);border:3px solid #FFD1DC}
   .bunny-face{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:80px;text-align:center}
-  .bunny-eyes{font-size:15px;letter-spacing:16px;margin-left:8px;transition:all .2s}
-  .bunny-mouth{font-size:12px;margin-top:-2px;transition:all .2s}
-  .bunny-cheeks{position:absolute;bottom:30px;width:14px;height:9px;background:#FFB6C1;border-radius:50%;opacity:.5;transition:all .3s}
+  .bunny-eyes{font-size:15px;letter-spacing:16px;margin-left:8px}.bunny-mouth{font-size:12px;margin-top:-2px}
+  .bunny-cheeks{position:absolute;bottom:30px;width:14px;height:9px;background:#FFB6C1;border-radius:50%;opacity:.5}
   .cheek-l{left:12px}.cheek-r{right:12px}
-  .bunny-ear{width:24px;height:50px;background:#FFF;border:3px solid #FFD1DC;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;position:absolute;top:0;transition:transform .15s;transform-origin:bottom center}
+  .bunny-ear{width:24px;height:50px;background:#FFF;border:3px solid #FFD1DC;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;position:absolute;top:0;transform-origin:bottom center}
   .bunny-ear-inner{width:10px;height:25px;background:#FFD1DC;border-radius:50%;margin:10px auto 0}
   .ear-l{left:18px;transform:rotate(-15deg)}.ear-r{right:18px;transform:rotate(15deg)}
-  .bunny-ribbon{position:absolute;top:40px;right:14px;font-size:20px;transform:rotate(15deg);transition:transform .15s}
+  .bunny-ribbon{position:absolute;top:40px;right:14px;font-size:20px;transform:rotate(15deg)}
 
-  /* Bear */
   .bear-body{width:85px;height:82px;background:#D2E9FF;border-radius:50%;position:absolute;bottom:0;left:50%;transform:translateX(-50%);box-shadow:0 4px 12px rgba(74,134,216,.15);border:3px solid #B3D4FF}
   .bear-face{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:85px;text-align:center}
-  .bear-eyes{font-size:14px;letter-spacing:18px;margin-left:8px;transition:all .2s}
+  .bear-eyes{font-size:14px;letter-spacing:18px;margin-left:8px}
   .bear-nose{width:12px;height:8px;background:#7EB6FF;border-radius:50%;margin:1px auto 0}
-  .bear-mouth{font-size:11px;transition:all .2s}
-  .bear-cheeks{position:absolute;bottom:28px;width:14px;height:9px;background:#B3D4FF;border-radius:50%;opacity:.4;transition:all .3s}
+  .bear-mouth{font-size:11px}
+  .bear-cheeks{position:absolute;bottom:28px;width:14px;height:9px;background:#B3D4FF;border-radius:50%;opacity:.4}
   .bear-cheek-l{left:14px}.bear-cheek-r{right:14px}
-  .bear-ear{width:30px;height:30px;background:#D2E9FF;border:3px solid #B3D4FF;border-radius:50%;position:absolute;top:6px;transition:transform .15s;transform-origin:bottom center}
+  .bear-ear{width:30px;height:30px;background:#D2E9FF;border:3px solid #B3D4FF;border-radius:50%;position:absolute;top:6px;transform-origin:bottom center}
   .bear-ear-inner{width:14px;height:14px;background:#B3D4FF;border-radius:50%;margin:5px auto 0}
   .bear-ear-l{left:10px}.bear-ear-r{right:10px}
-  .bear-hat{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:24px;transition:transform .15s}
+  .bear-hat{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:24px}
 
-  /* Volume meter */
   .vol-meter{position:absolute;top:10px;right:12px;display:flex;gap:3px;align-items:flex-end;height:30px;opacity:0;transition:opacity .3s}
   .vol-meter.active{opacity:1}
-  .vol-bar{width:5px;border-radius:3px;transition:height .1s,background .4s}
-  .theme-ko .vol-bar{background:#FF9EC6}
-  .theme-en .vol-bar{background:#7EB6FF}
+  .vol-bar{width:5px;border-radius:3px;transition:height .08s}
+  .theme-ko .vol-bar{background:#FF9EC6}.theme-en .vol-bar{background:#7EB6FF}
 
-  /* Speech bubble */
-  .speech-bubble{background:#FFF;border-radius:20px;padding:14px 16px;margin-bottom:14px;min-height:65px;position:relative;font-size:19px;color:#555;line-height:1.5;text-align:center;transition:border-color .4s,box-shadow .4s}
+  .speech-bubble{background:#FFF;border-radius:20px;padding:14px 16px;margin-bottom:14px;min-height:65px;position:relative;font-size:19px;color:#555;line-height:1.5;text-align:center;transition:border-color .4s}
   .theme-ko .speech-bubble{border:3px solid #FFD1DC;box-shadow:0 4px 12px rgba(231,84,128,.1)}
   .theme-en .speech-bubble{border:3px solid #B3D4FF;box-shadow:0 4px 12px rgba(74,134,216,.1)}
-  .speech-bubble::after{content:'';position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;transition:border-bottom-color .4s}
-  .theme-ko .speech-bubble::after{border-bottom:11px solid #FFD1DC}
-  .theme-en .speech-bubble::after{border-bottom:11px solid #B3D4FF}
+  .speech-bubble::after{content:'';position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent}
+  .theme-ko .speech-bubble::after{border-bottom:11px solid #FFD1DC}.theme-en .speech-bubble::after{border-bottom:11px solid #B3D4FF}
   .placeholder{font-size:17px}.theme-ko .placeholder{color:#D4A0B0}.theme-en .placeholder{color:#A0B8D0}
 
   .status{text-align:center;font-size:14px;min-height:20px;margin-bottom:8px}
   .theme-ko .status{color:#D4739A}.theme-en .status{color:#6A9FD8}
 
-  /* Buttons */
   .btn-row{display:flex;gap:10px;margin-bottom:12px}
   .big-btn{flex:1;border:none;border-radius:22px;padding:14px 8px;font-family:'Gaegu',cursive;font-size:16px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s;user-select:none;box-shadow:0 4px 12px rgba(0,0,0,.08);color:#FFF}
-  .big-btn:active{transform:scale(.95)}
-  .big-btn .icon{font-size:30px}
+  .big-btn:active{transform:scale(.95)}.big-btn .icon{font-size:30px}
   .theme-ko .btn-listen{background:linear-gradient(135deg,#FF9EC6,#FF6FA3)}
   .theme-ko .btn-speak{background:linear-gradient(135deg,#B19CD9,#9B7FD4)}
   .theme-ko .btn-replay{background:linear-gradient(135deg,#FFB347,#FFA020)}
@@ -113,10 +95,8 @@
   .btn-listen.recording{animation:pulse 1s ease infinite}
   @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,111,163,.5)}50%{box-shadow:0 0 0 12px rgba(255,111,163,0)}}
 
-  /* Input */
   .input-section{background:#FFF;border-radius:18px;padding:12px;margin-bottom:14px;transition:border-color .4s}
-  .theme-ko .input-section{border:3px solid #E8D4F0}
-  .theme-en .input-section{border:3px solid #B3D4FF}
+  .theme-ko .input-section{border:3px solid #E8D4F0}.theme-en .input-section{border:3px solid #B3D4FF}
   .input-section label{font-size:15px;display:block;margin-bottom:6px;text-align:center}
   .theme-ko .input-section label{color:#9B7FD4}.theme-en .input-section label{color:#5B9BF5}
   .input-section textarea{width:100%;border-radius:12px;padding:10px;font-family:'Gaegu',cursive;font-size:17px;color:#555;resize:none;height:58px;outline:none}
@@ -125,13 +105,11 @@
 
   .section-title{text-align:center;font-size:16px;margin-bottom:8px}
   .theme-ko .section-title{color:#D4739A}.theme-en .section-title{color:#5B9BF5}
-
   .word-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
   .word-card{background:#FFF;border-radius:14px;padding:10px 14px;font-size:18px;font-weight:700;cursor:pointer;transition:all .2s;user-select:none}
   .word-card:active{transform:scale(.92)}
   .theme-ko .word-card{border:2.5px solid #FFD1DC;color:#E75480;box-shadow:0 2px 6px rgba(231,84,128,.1)}
   .theme-en .word-card{border:2.5px solid #B3D4FF;color:#4A86D8;box-shadow:0 2px 6px rgba(74,134,216,.1)}
-
   .lang-content{display:none}.lang-content.active{display:block}
   .not-supported{background:#FFF0F0;border:2px solid #FFB6C1;border-radius:16px;padding:16px;text-align:center;color:#D4739A;font-size:16px;margin:16px 0}
 </style>
@@ -145,13 +123,11 @@
     <button class="lang-btn active-ko" id="btnKo" onclick="switchLang('ko')">🐰 한국어</button>
     <button class="lang-btn" id="btnEn" onclick="switchLang('en')">🐻 English</button>
   </div>
-
   <div class="header">
     <h1 id="headerTitle">🐰 토끼와 말해요!</h1>
     <p id="headerSub">버튼을 눌러서 이야기해 보세요 💕</p>
   </div>
 
-  <!-- Stage with characters -->
   <div class="stage" id="stage">
     <div class="particles" id="particles"></div>
     <div class="vol-meter" id="volMeter">
@@ -168,7 +144,6 @@
         <span></span><span></span><span></span><span></span><span></span><span></span>
       </div>
     </div>
-    <!-- Bunny -->
     <div class="char-container visible" id="charBunny">
       <div class="character" id="bunnyChar">
         <div class="bunny-ear ear-l" id="earL"><div class="bunny-ear-inner"></div></div>
@@ -184,7 +159,6 @@
         </div>
       </div>
     </div>
-    <!-- Bear -->
     <div class="char-container hidden" id="charBear">
       <div class="character" id="bearChar">
         <div class="bear-ear bear-ear-l" id="bearEarL"><div class="bear-ear-inner"></div></div>
@@ -204,11 +178,10 @@
   </div>
 
   <div class="speech-bubble" id="speechBubble">
-    <span class="placeholder" id="placeholderText">여기에 내가 한 말이 나타나요! 🌟</span>
+    <span class="placeholder">여기에 내가 한 말이 나타나요! 🌟</span>
   </div>
   <div class="status" id="status"></div>
 
-  <!-- 3 Buttons -->
   <div class="btn-row">
     <button class="big-btn btn-listen" id="btnListen" onclick="toggleListen()">
       <span class="icon">🎤</span><span id="listenLabel">내 말 듣기</span>
@@ -226,7 +199,6 @@
     <textarea id="ttsInput" placeholder="읽어줄 말을 써 보세요~"></textarea>
   </div>
 
-  <!-- Korean Cards -->
   <div class="lang-content active" id="cardsKo">
     <div class="section-title">🐾 동물</div>
     <div class="word-cards">
@@ -270,7 +242,6 @@
     </div>
   </div>
 
-  <!-- English Cards -->
   <div class="lang-content" id="cardsEn">
     <div class="section-title">🐾 Animals</div>
     <div class="word-cards">
@@ -313,372 +284,463 @@
       <div class="word-card" onclick="speakWord(this)">Five 5️⃣</div>
     </div>
   </div>
-
-  <div id="notSupported" class="not-supported" style="display:none">😢 이 브라우저에서는 음성 기능을 사용할 수 없어요.<br>Chrome 브라우저를 사용해 주세요!</div>
 </div>
 
 <script>
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const synth = window.speechSynthesis;
-let recognition=null, isListening=false, isSpeaking=false, currentLang='ko';
-let mediaRecorder=null, audioChunks=[], recordedBlob=null, audioCtx=null, analyser=null, micStream=null, animId=null;
+(function(){
+  "use strict";
 
-const $=id=>document.getElementById(id);
-const bubble=$('speechBubble'), statusEl=$('status'), ttsInput=$('ttsInput');
-const btnListen=$('btnListen'), btnSpeak=$('btnSpeak'), btnReplay=$('btnReplay');
-const listenLabel=$('listenLabel'), speakLabel=$('speakLabel'), replayLabel=$('replayLabel');
-const volMeter=$('volMeter'), groundLines=$('groundLines'), particlesEl=$('particles');
-const bars=[0,1,2,3,4].map(i=>$('vb'+i));
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var synth = window.speechSynthesis;
+  var recognition = null;
+  var isListening = false;
+  var isSpeaking = false;
+  var currentLang = 'ko';
+  var mediaRecorder = null;
+  var audioChunks = [];
+  var recordedBlob = null;
+  var audioCtx = null;
+  var analyser = null;
+  var micStream = null;
+  var animId = null;
+  var groundX = 0;
 
-const charEls={
-  ko:{container:$('charBunny'),char:$('bunnyChar'),mouth:$('bunnyMouth'),eyes:$('bunnyEyes'),
-      earL:$('earL'),earR:$('earR'),ribbon:$('ribbon'),cheekL:$('bCheekL'),cheekR:$('bCheekR')},
-  en:{container:$('charBear'),char:$('bearChar'),mouth:$('bearMouth'),eyes:$('bearEyes'),
-      earL:$('bearEarL'),earR:$('bearEarR'),hat:$('bearHat'),cheekL:$('brCheekL'),cheekR:$('brCheekR')}
-};
+  function $(id){ return document.getElementById(id); }
 
-const txt={
-  ko:{title:'🐰 토끼와 말해요!',sub:'버튼을 눌러서 이야기해 보세요 💕',
-    placeholder:'여기에 내가 한 말이 나타나요! 🌟',
-    listen:'내 말 듣기',listening:'듣고 있어요...',speak:'말해줘!',speaking:'말하는 중...',
-    replay:'다시 듣기',replaying:'재생 중...',
-    inputLabel:'✏️ 여기에 쓰면 토끼가 읽어줘요!',inputPlaceholder:'읽어줄 말을 써 보세요~',
-    statusListen:'토끼가 귀를 쫑긋! 🐰',statusDone:'잘 들었어요! 🎉',statusTalk:'토끼가 말하고 있어요~ 🗣️',
-    statusNoInput:'먼저 말하거나 글을 써 주세요! ✏️',statusMic:'🎤 마이크를 허용해 주세요!',
-    statusNoSpeech:'소리가 안 들렸어요~ 다시 해볼까요? 🐰',statusError:'앗, 다시 해볼까요? 🌸',
-    bubbleListening:'말해 보세요~ 🎧',statusReplay:'내 목소리를 듣고 있어요! 🎵',statusNoRec:'먼저 녹음해 주세요! 🎤'},
-  en:{title:'🐻 Talk with Bear!',sub:'Press the button and speak English 💙',
-    placeholder:'What you say will appear here! 🌟',
-    listen:'Listen',listening:'Listening...',speak:'Speak!',speaking:'Speaking...',
-    replay:'Replay',replaying:'Playing...',
-    inputLabel:'✏️ Type here and Bear will read it!',inputPlaceholder:'Write something for Bear~',
-    statusListen:'Bear is listening! 🐻',statusDone:'Great job! 🎉',statusTalk:'Bear is talking~ 🗣️',
-    statusNoInput:'Say something or type first! ✏️',statusMic:'🎤 Please allow microphone!',
-    statusNoSpeech:"Couldn't hear you~ Try again? 🐻",statusError:'Oops, try again! 🌸',
-    bubbleListening:'Say something~ 🎧',statusReplay:'Listening to your voice! 🎵',statusNoRec:'Record first! 🎤'}
-};
+  var bubble = $('speechBubble');
+  var statusEl = $('status');
+  var ttsInput = $('ttsInput');
+  var btnListen = $('btnListen');
+  var btnSpeak = $('btnSpeak');
+  var btnReplay = $('btnReplay');
+  var listenLabel = $('listenLabel');
+  var speakLabel = $('speakLabel');
+  var replayLabel = $('replayLabel');
+  var volMeter = $('volMeter');
+  var groundLines = $('groundLines');
+  var particlesEl = $('particles');
+  var bars = [0,1,2,3,4].map(function(i){ return $('vb'+i); });
 
-const particleEmojis={ko:['💗','🌸','⭐','✨','🎀','💕'],en:['💙','⭐','✨','🎩','💫','🌟']};
+  var charEls = {
+    ko: { container:$('charBunny'), char:$('bunnyChar'), mouth:$('bunnyMouth'), eyes:$('bunnyEyes'),
+          earL:$('earL'), earR:$('earR'), ribbon:$('ribbon'), hat:null, cheekL:$('bCheekL'), cheekR:$('bCheekR') },
+    en: { container:$('charBear'), char:$('bearChar'), mouth:$('bearMouth'), eyes:$('bearEyes'),
+          earL:$('bearEarL'), earR:$('bearEarR'), ribbon:null, hat:$('bearHat'), cheekL:$('brCheekL'), cheekR:$('brCheekR') }
+  };
 
-// === Language Switch ===
-function switchLang(lang){
-  if(isSpeaking){synth.cancel();stopSpeaking()}
-  if(isListening&&recognition){recognition.stop();isListening=false;stopAudioAnalysis()}
-  currentLang=lang;
-  document.body.className='theme-'+lang;
-  $('langToggle').className='lang-toggle '+lang;
-  $('btnKo').className='lang-btn'+(lang==='ko'?' active-ko':'');
-  $('btnEn').className='lang-btn'+(lang==='en'?' active-en':'');
-  charEls.ko.container.className='char-container '+(lang==='ko'?'visible':'hidden');
-  charEls.en.container.className='char-container '+(lang==='en'?'visible':'hidden');
-  const t=txt[lang];
-  $('headerTitle').textContent=t.title;$('headerSub').textContent=t.sub;
-  bubble.innerHTML='<span class="placeholder">'+t.placeholder+'</span>';
-  listenLabel.textContent=t.listen;speakLabel.textContent=t.speak;replayLabel.textContent=t.replay;
-  $('inputLabel').textContent=t.inputLabel;ttsInput.placeholder=t.inputPlaceholder;
-  statusEl.textContent='';btnListen.classList.remove('recording');
-  $('cardsKo').classList.toggle('active',lang==='ko');
-  $('cardsEn').classList.toggle('active',lang==='en');
-  if(recognition)recognition.lang=lang==='ko'?'ko-KR':'en-US';
-  recordedBlob=null;audioChunks=[];
-}
+  var uiText = {
+    ko: { title:'🐰 토끼와 말해요!', sub:'버튼을 눌러서 이야기해 보세요 💕',
+      placeholder:'여기에 내가 한 말이 나타나요! 🌟',
+      listen:'내 말 듣기', listening:'듣고 있어요...', speak:'말해줘!', speaking:'말하는 중...',
+      replay:'다시 듣기', replaying:'재생 중...',
+      inputLabel:'✏️ 여기에 쓰면 토끼가 읽어줘요!', inputPlaceholder:'읽어줄 말을 써 보세요~',
+      statusListen:'토끼가 귀를 쫑긋! 🐰', statusDone:'잘 들었어요! 🎉', statusTalk:'토끼가 말하고 있어요~ 🗣️',
+      statusNoInput:'먼저 말하거나 글을 써 주세요! ✏️', statusMic:'🎤 마이크를 허용해 주세요!',
+      statusNoSpeech:'소리가 안 들렸어요~ 다시 해볼까요? 🐰', statusError:'앗, 다시 해볼까요? 🌸',
+      bubbleListening:'말해 보세요~ 🎧', statusReplay:'내 목소리를 듣고 있어요! 🎵', statusNoRec:'먼저 녹음해 주세요! 🎤' },
+    en: { title:'🐻 Talk with Bear!', sub:'Press the button and speak English 💙',
+      placeholder:'What you say will appear here! 🌟',
+      listen:'Listen', listening:'Listening...', speak:'Speak!', speaking:'Speaking...',
+      replay:'Replay', replaying:'Playing...',
+      inputLabel:'✏️ Type here and Bear will read it!', inputPlaceholder:'Write something for Bear~',
+      statusListen:'Bear is listening! 🐻', statusDone:'Great job! 🎉', statusTalk:'Bear is talking~ 🗣️',
+      statusNoInput:'Say something or type first! ✏️', statusMic:'🎤 Please allow microphone!',
+      statusNoSpeech:"Couldn't hear you~ Try again? 🐻", statusError:'Oops, try again! 🌸',
+      bubbleListening:'Say something~ 🎧', statusReplay:'Listening to your voice! 🎵', statusNoRec:'Record first! 🎤' }
+  };
 
-// === Audio Analysis (volume-based animation) ===
-function startAudioAnalysis(stream){
-  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  analyser=audioCtx.createAnalyser();
-  analyser.fftSize=256;
-  const src=audioCtx.createMediaStreamSource(stream);
-  src.connect(analyser);
-  const data=new Uint8Array(analyser.frequencyBinCount);
-  volMeter.classList.add('active');
-  let groundX=0;
+  var particleEmojis = { ko:['💗','🌸','⭐','✨','🎀','💕'], en:['💙','⭐','✨','🎩','💫','🌟'] };
 
-  function loop(){
-    analyser.getByteFrequencyData(data);
-    let sum=0;for(let i=0;i<data.length;i++)sum+=data[i];
-    const avg=sum/data.length;
-    const level=Math.min(avg/80,1); // 0~1
+  // === Voices ===
+  function loadVoices(){ if(synth) synth.getVoices(); }
+  loadVoices();
+  if(synth && synth.onvoiceschanged !== undefined){ synth.onvoiceschanged = loadVoices; }
 
-    // Volume bars
-    bars.forEach((b,i)=>{
-      const h=4+level*(22+Math.sin(Date.now()/100+i*1.2)*8);
-      b.style.height=h+'px';
+  // === Language ===
+  window.switchLang = function(lang){
+    if(isSpeaking){ synth.cancel(); resetCharacter(); isSpeaking=false; }
+    if(isListening){ stopListening(); }
+    currentLang = lang;
+    document.body.className = 'theme-' + lang;
+    $('langToggle').className = 'lang-toggle ' + lang;
+    $('btnKo').className = 'lang-btn' + (lang==='ko'?' active-ko':'');
+    $('btnEn').className = 'lang-btn' + (lang==='en'?' active-en':'');
+    charEls.ko.container.className = 'char-container ' + (lang==='ko'?'visible':'hidden');
+    charEls.en.container.className = 'char-container ' + (lang==='en'?'visible':'hidden');
+    var t = uiText[lang];
+    $('headerTitle').textContent = t.title;
+    $('headerSub').textContent = t.sub;
+    bubble.innerHTML = '<span class="placeholder">' + t.placeholder + '</span>';
+    listenLabel.textContent = t.listen;
+    speakLabel.textContent = t.speak;
+    replayLabel.textContent = t.replay;
+    $('inputLabel').textContent = t.inputLabel;
+    ttsInput.placeholder = t.inputPlaceholder;
+    ttsInput.value = '';
+    statusEl.textContent = '';
+    btnListen.classList.remove('recording');
+    btnSpeak.classList.remove('speaking');
+    $('cardsKo').classList.toggle('active', lang==='ko');
+    $('cardsEn').classList.toggle('active', lang==='en');
+    if(recognition) recognition.lang = (lang==='ko') ? 'ko-KR' : 'en-US';
+    recordedBlob = null;
+    audioChunks = [];
+  };
+
+  // === Character Animation Helpers ===
+  function animateChar(level){
+    var c = charEls[currentLang];
+    var now = Date.now();
+    var bounce = Math.sin(now / (200 - level*120)) * (4 + level*16);
+    c.char.style.transform = 'translateY(' + bounce + 'px)';
+
+    var earFlap = Math.sin(now/150) * level * 20;
+    if(c.earL) c.earL.style.transform = 'rotate(' + (-15+earFlap) + 'deg)';
+    if(c.earR) c.earR.style.transform = 'rotate(' + (15-earFlap) + 'deg)';
+    if(c.ribbon) c.ribbon.style.transform = 'rotate(' + (15+Math.sin(now/120)*level*15) + 'deg)';
+    if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate(' + (Math.sin(now/120)*level*12) + 'deg)';
+
+    var blush = 0.4 + level*0.5;
+    c.cheekL.style.opacity = blush;
+    c.cheekR.style.opacity = blush;
+
+    c.mouth.textContent = level>0.5 ? '○' : level>0.2 ? 'o' : 'ω';
+    c.mouth.style.transform = 'scaleY(' + (1+level*0.8) + ')';
+    c.eyes.textContent = level>0.6 ? '> <' : level>0.3 ? '^ ^' : '• •';
+
+    bars.forEach(function(b,i){
+      b.style.height = (4 + level*(22 + Math.sin(now/100+i*1.2)*8)) + 'px';
     });
 
-    // Ground scroll speed
-    groundX-=level*6+0.5;
-    groundLines.style.transform='translateX('+groundX%80+'px)';
+    groundX -= level*6 + 0.5;
+    groundLines.style.transform = 'translateX(' + (groundX%80) + 'px)';
 
-    // Character animation
-    const c=charEls[currentLang];
-    const charEl=c.char;
-
-    // Bounce height
-    const bounce=Math.sin(Date.now()/(200-level*120))*( 4+level*16);
-    charEl.style.transform='translateY('+bounce+'px)';
-
-    // Ears flap
-    const earFlap=Math.sin(Date.now()/150)*level*20;
-    if(c.earL){c.earL.style.transform='rotate('+ (-15+earFlap)+'deg)'}
-    if(c.earR){c.earR.style.transform='rotate('+ (15-earFlap)+'deg)'}
-
-    // Accessory wobble
-    if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(Date.now()/120)*level*15)+'deg)';
-    if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(Date.now()/120)*level*12)+'deg)';
-
-    // Cheek blush
-    const blush=0.4+level*0.5;
-    c.cheekL.style.opacity=blush;c.cheekR.style.opacity=blush;
-
-    // Mouth
-    const mouthScale=1+level*0.8;
-    c.mouth.style.transform='scaleY('+mouthScale+')';
-    if(level>0.5)c.mouth.textContent='○';
-    else if(level>0.2)c.mouth.textContent='o';
-    else c.mouth.textContent='ω';
-
-    // Eyes squint when loud
-    if(level>0.6)c.eyes.textContent='> <';
-    else if(level>0.3)c.eyes.textContent='^ ^';
-    else c.eyes.textContent='• •';
-
-    // Particles
-    if(level>0.4&&Math.random()<level*0.3)spawnParticle();
-
-    animId=requestAnimationFrame(loop);
-  }
-  loop();
-}
-
-function stopAudioAnalysis(){
-  if(animId){cancelAnimationFrame(animId);animId=null}
-  volMeter.classList.remove('active');
-  bars.forEach(b=>b.style.height='4px');
-  groundLines.style.transform='translateX(0)';
-  // Reset character
-  ['ko','en'].forEach(l=>{
-    const c=charEls[l];
-    c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
-    c.cheekL.style.opacity='';c.cheekR.style.opacity='';c.mouth.style.transform='';
-    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
-    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
-    if(c.hat)c.hat.style.transform='translateX(-50%)';
-  });
-  if(audioCtx){audioCtx.close();audioCtx=null}
-}
-
-// === Particles ===
-function spawnParticle(){
-  const el=document.createElement('div');
-  el.className='particle';
-  el.textContent=particleEmojis[currentLang][Math.floor(Math.random()*particleEmojis[currentLang].length)];
-  el.style.left=(20+Math.random()*60)+'%';
-  el.style.bottom='50px';
-  el.style.fontSize=(14+Math.random()*10)+'px';
-  particlesEl.appendChild(el);
-  let y=0,x=0,o=1;
-  const dx=(Math.random()-0.5)*2;
-  function rise(){
-    y+=1.5;x+=dx;o-=0.015;
-    el.style.transform='translateY(-'+y+'px) translateX('+x+'px) rotate('+(x*3)+'deg)';
-    el.style.opacity=Math.max(0,o);
-    if(o>0)requestAnimationFrame(rise);
-    else el.remove();
-  }
-  requestAnimationFrame(rise);
-}
-
-// === Speech Recognition + MediaRecorder ===
-if(!SR){$('notSupported').style.display='block';btnListen.style.opacity=.4;btnListen.onclick=null}
-
-if(SR){
-  recognition=new SR();recognition.lang='ko-KR';recognition.interimResults=true;recognition.continuous=false;
-
-  recognition.onresult=e=>{
-    let tr='';for(let i=0;i<e.results.length;i++)tr+=e.results[i][0].transcript;
-    bubble.innerHTML=tr||'<span class="placeholder">'+txt[currentLang].bubbleListening+'</span>';
-    if(e.results[e.results.length-1].isFinal)ttsInput.value=tr;
-  };
-  recognition.onend=()=>{
-    if(isListening){
-      isListening=false;
-      btnListen.classList.remove('recording');listenLabel.textContent=txt[currentLang].listen;
-      stopAudioAnalysis();stopMediaRecorder();
-      statusEl.textContent=txt[currentLang].statusDone;
-      setTimeout(()=>{if(statusEl.textContent===txt[currentLang].statusDone)statusEl.textContent=''},2000);
-    }
-  };
-  recognition.onerror=e=>{
-    isListening=false;btnListen.classList.remove('recording');listenLabel.textContent=txt[currentLang].listen;
-    stopAudioAnalysis();stopMediaRecorder();
-    const t=txt[currentLang];
-    if(e.error==='not-allowed')statusEl.textContent=t.statusMic;
-    else if(e.error==='no-speech')statusEl.textContent=t.statusNoSpeech;
-    else statusEl.textContent=t.statusError;
-  };
-}
-
-function stopMediaRecorder(){
-  if(mediaRecorder&&mediaRecorder.state!=='inactive'){mediaRecorder.stop()}
-}
-
-async function toggleListen(){
-  if(!recognition)return;
-  if(isListening){recognition.stop();isListening=false;return}
-  if(isSpeaking){synth.cancel();stopSpeaking()}
-
-  try{
-    micStream=await navigator.mediaDevices.getUserMedia({audio:true});
-  }catch(e){statusEl.textContent=txt[currentLang].statusMic;return}
-
-  // Start MediaRecorder
-  audioChunks=[];recordedBlob=null;
-  mediaRecorder=new MediaRecorder(micStream);
-  mediaRecorder.ondataavailable=e=>{if(e.data.size>0)audioChunks.push(e.data)};
-  mediaRecorder.onstop=()=>{
-    recordedBlob=new Blob(audioChunks,{type:'audio/webm'});
-    micStream.getTracks().forEach(t=>t.stop());
-  };
-  mediaRecorder.start();
-
-  // Start audio analysis
-  startAudioAnalysis(micStream);
-
-  // Start recognition
-  isListening=true;
-  btnListen.classList.add('recording');
-  listenLabel.textContent=txt[currentLang].listening;
-  bubble.innerHTML='<span class="placeholder">'+txt[currentLang].bubbleListening+'</span>';
-  statusEl.textContent=txt[currentLang].statusListen;
-
-  try{recognition.start()}catch(e){}
-}
-
-// === Replay Recording ===
-function replayRecording(){
-  if(!recordedBlob){
-    statusEl.textContent=txt[currentLang].statusNoRec;
-    setTimeout(()=>statusEl.textContent='',2000);return;
-  }
-  const url=URL.createObjectURL(recordedBlob);
-  const audio=new Audio(url);
-
-  // Use audio element for analysis during playback
-  const ctx=new(window.AudioContext||window.webkitAudioContext)();
-  const src=ctx.createMediaElementSource(audio);
-  const ana=ctx.createAnalyser();ana.fftSize=256;
-  src.connect(ana);src.connect(ctx.destination);
-  const data=new Uint8Array(ana.frequencyBinCount);
-
-  statusEl.textContent=txt[currentLang].statusReplay;
-  replayLabel.textContent=txt[currentLang].replaying;
-  let rId;
-
-  function loop(){
-    ana.getByteFrequencyData(data);
-    let sum=0;for(let i=0;i<data.length;i++)sum+=data[i];
-    const level=Math.min((sum/data.length)/80,1);
-    const c=charEls[currentLang];
-    const bounce=Math.sin(Date.now()/(200-level*120))*(4+level*16);
-    c.char.style.transform='translateY('+bounce+'px)';
-    const earFlap=Math.sin(Date.now()/150)*level*20;
-    if(c.earL)c.earL.style.transform='rotate('+(-15+earFlap)+'deg)';
-    if(c.earR)c.earR.style.transform='rotate('+(15-earFlap)+'deg)';
-    if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(Date.now()/120)*level*15)+'deg)';
-    if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(Date.now()/120)*level*12)+'deg)';
-    c.cheekL.style.opacity=0.4+level*0.5;c.cheekR.style.opacity=0.4+level*0.5;
-    const ms=1+level*0.8;c.mouth.style.transform='scaleY('+ms+')';
-    c.mouth.textContent=level>0.5?'○':level>0.2?'o':'ω';
-    c.eyes.textContent=level>0.6?'> <':level>0.3?'^ ^':'• •';
-    bars.forEach((b,i)=>b.style.height=(4+level*(22+Math.sin(Date.now()/100+i*1.2)*8))+'px');
-    if(level>0.4&&Math.random()<level*0.3)spacle();
-    rId=requestAnimationFrame(loop);
+    if(level>0.4 && Math.random()<level*0.3) spawnParticle();
   }
 
-  volMeter.classList.add('active');
-  audio.play();loop();
-
-  audio.onended=()=>{
-    cancelAnimationFrame(rId);ctx.close();URL.revokeObjectURL(url);
+  function resetCharacter(){
+    ['ko','en'].forEach(function(l){
+      var c = charEls[l];
+      c.char.style.transform = '';
+      c.mouth.textContent = 'ω';
+      c.mouth.style.transform = '';
+      c.eyes.textContent = '• •';
+      c.cheekL.style.opacity = '';
+      c.cheekR.style.opacity = '';
+      if(c.earL) c.earL.style.transform = '';
+      if(c.earR) c.earR.style.transform = '';
+      if(c.ribbon) c.ribbon.style.transform = 'rotate(15deg)';
+      if(c.hat) c.hat.style.transform = 'translateX(-50%)';
+    });
+    bars.forEach(function(b){ b.style.height='4px'; });
+    groundLines.style.transform = 'translateX(0)';
     volMeter.classList.remove('active');
-    replayLabel.textContent=txt[currentLang].replay;statusEl.textContent='';
-    stopAudioAnalysis();
-    // Reset
-    const c=charEls[currentLang];
-    c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
-    c.cheekL.style.opacity='';c.cheekRe.opacity='';c.mouth.style.transform='';
-    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
-    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
-    if(c.hat)c.hat.style.transform='translateX(-50%)';
-    bars.forEach(b=>b.style.height='4px');
-  };
-}
-
-// === TTS ===
-function speakText(text){
-  if(!synth||!text)return;synth.cancel();
-  const clean=text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu,'').trim();
-  if(!clean)return;
-  const utter=new SpeechSynthesisUtterance(clean);
-  const isEn=currentLang==='en';
-  utter.lang=isEn?'en-US':'ko-KR';utter.rate=isEn?0.8:0.9;utter.pitch=1.3;
-  const voices=synth.getVoices();
-  const lf=isEn?'en-US':'ko-KR',lp=isEn?'en':'ko';
-  const v=voices.find(v=>v.lang===lf&&v.name.toLowerCase().includes('female'))||voices.find(v=>v.lang===lf)||voices.find(v=>v.lang.startsWith(lp));
-  if(v)utter.voice=v;
-
-  const t=txt[currentLang],c=charEls[currentLang];
-  // Simple TTS animation (no analyser available for TTS)
-  let ttsAnimId;
-  utter.onstart=()=>{
-    isSpeaking=true;btnSpeak.classList.add('speaking');speakLabel.textContent=t.speaking;
-    statusEl.textContent=t.statusTalk;
-    function anim(){
-      const t2=Date.now();
-      const bounce=Math.sin(t2/180)*8;
-      c.char.style.transform='translateY('+bounce+'px)';
-      c.mouth.textContent=Math.sin(t2/120)>0?'○':'ω';
-      const ef=Math.sin(t2/150)*10;
-      if(c.earL)c.earL.style.transform='rotate('+(-15+ef)+'deg)';
-   if(c.earR)c.earR.style.transform='rotate('+(15-ef)+'deg)';
-      if(c.ribbon)c.ribbon.style.transform='rotate('+(15+Math.sin(t2/120)*8)+'deg)';
-      if(c.hat)c.hat.style.transform='translateX(-50%) rotate('+(Math.sin(t2/120)*8)+'deg)';
-      ttsAnimId=requestAnimationFrame(anim);
-    }
-    anim();
-  };
-  utter.onend=()=>{cancelAnimationFrame(ttsAnimId);stopSpeaking()};
-  utter.onerror=()=>{cancelAnimationFrame(ttsAnimId);stopSpeaking()};
-  synth.speak(utter);
-}
-
-function stopSpeaking(){
-  isSpeaking=false;btnSpeak.classList.remove('speaking');speakLabel.textContent=txt[currentLang].speak;
-  statusEl.textContent='';
-  ['ko','en'].forEach(l=>{
-    const c=charEls[l];c.char.style.transform='';c.mouth.textContent='ω';c.eyes.textContent='• •';
-    c.cheekL.style.opacity='';c.cheekR.style.opacity='';c.mouth.style.transform='';
-    if(c.earL)c.earL.style.transform='';if(c.earR)c.earR.style.transform='';
-    if(c.ribbon)c.ribbon.style.transform='rotate(15deg)';
-    if(c.hat)c.hat.style.transform='translateX(-50  });
-}
-
-function speakNow(){
-  const text=ttsInput.value.trim()||bubble.textContent.trim();
-  const t=txt[currentLang];
-  const igs=[t.placeholder,t.bubbleListening];
-  if(!text||igs.some(ig=>text.includes(ig.replace(/[🌟🎧]/g,'').trim()))){
-    statusEl.textContent=t.statusNoInput;setTimeout(()=>statusEl.textContent='',2000);return;
   }
-  bubble.textContent=text;speakText(text);
-}
 
-function speakWord(el){
-  const text=el.textContent;bubble.textContent=text;ttsInput.value=text;speakText(text);
-}
+  function spawnParticle(){
+    var el = document.createElement('div');
+    el.className = 'particle';
+    var emojis = particleEmojis[currentLang];
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left = (20+Math.random()*60) + '%';
+    el.style.bottom = '50px';
+    el.style.fontSize = (14+Math.random()*10) + 'px';
+    particlesEl.appendChild(el);
+    var y=0, xd=(Math.random()-0.5)*2, o=1;
+    function rise(){
+      y+=1.5; o-=0.015;
+      el.style.transform = 'translateY(-'+y+'px) translateX('+(xd*y*0.3)+'px)';
+      el.style.opacity = Math.max(0,o);
+      if(o>0) requestAnimationFrame(rise); else el.remove();
+    }
+    requestAnimationFrame(rise);
+  }
 
-if(syh){synth.getVoices();speechSynthesis.onvoiceschanged=()=>synth.getVoices()}
+  // === Audio Analysis ===
+  function startAudioAnalysis(stream){
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      var src = audioCtx.createMediaStreamSource(stream);
+      src.connect(analyser);
+    } catch(e){ return; }
+
+    var data = new Uint8Array(analyser.frequencyBinCount);
+    volMeter.classList.add('active');
+
+    function loop(){
+      if(!analyser) return;
+      analyser.getByteFrequencyData(data);
+      var sum=0;
+      for(var i=0;i<data.length;i++) sum+=data[i];
+      var level = Math.min((sum/data.length)/80, 1);
+      animateChar(level);
+      animId = requestAnimationFrame(loop);
+    }
+    loop();
+  }
+
+  function stopAudioAnalysis(){
+    if(animId){ cancelAnimationFrame(animId); animId=null; }
+    if(audioCtx){
+      try{ audioCtx.close(); }catch(e){}
+      audioCtx=null; analyser=null;
+    }
+    resetCharacter();
+  }
+
+  // === Speech Recognition ===
+  if(!SR){
+    $('notSupported').style.display='block';
+    btnListen.style.opacity=0.4;
+    btnListen.onclick=null;
+  }
+
+  if(SR){
+    recognition = new SR();
+    recognition.lang = 'ko-KR';
+    recognition.interimResults = true;
+    recognition.continuous = false;
+
+    recognition.onresult = function(e){
+      var tr='';
+      for(var i=0;i<e.results.length;i++) tr += e.results[i][0].transcript;
+      bubble.innerHTML = tr || '<span class="placeholder">' + uiText[currentLang].bubbleListening + '</span>';
+      if(e.results[e.results.length-1].isFinal) ttsInput.value = tr;
+    };
+
+    recognition.onend = function(){
+      if(isListening) finishListening(uiText[currentLang].statusDone);
+    };
+
+    recognition.onerror = function(e){
+      var t = uiText[currentLang];
+      var msg = t.statusError;
+      if(e.error==='not-allowed') msg = t.statusMic;
+      else if(e.error==='no-speech') msg = t.statusNoSpeech;
+      finishListening(msg);
+    };
+  }
+
+  function finishListening(msg){
+    isListening = false;
+    btnListen.classList.remove('recording');
+    listenLabel.textContent = uiText[currentLang].listen;
+    if(mediaRecorder && mediaRecorder.state !== 'inactive'){
+      mediaRecorder.stop();
+    }
+    stopAudioAnalysis();
+    statusEl.textContent = msg || '';
+    if(msg){
+      setTimeout(function(){
+        if(statusEl.textContent === msg) statusEl.textContent = '';
+      }, 2500);
+    }
+  }
+
+  function stopListening(){
+    if(recognition){
+      try{ recognition.stop(); }catch(e){}
+    }
+    finishListening('');
+  }
+
+  window.toggleListen = function(){
+    if(!recognition) return;
+    if(isListening){ stopListening(); return; }
+    if(isSpeaking){ synth.cancel(); resetCharacter(); isSpeaking=false; }
+
+    var t = uiText[currentLang];
+
+    // Request mic
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+      micStream = stream;
+
+      // MediaRecorder for replay
+      audioChunks = [];
+      recordedBlob = null;
+      try{
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function(e){ if(e.data.size>0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = function(){
+          recordedBlob = new Blob(audioChunks, {type:'audio/webm'});
+          if(micStream){ micStream.getTracks().forEach(function(t){t.stop()}); }
+        };
+        mediaRecorder.start();
+      }catch(e){}
+
+      // Audio analysis for animation
+      startAudioAnalysis(stream);
+
+      // Speech recognition
+      isListening = true;
+      btnListen.classList.add('recording');
+      listenLabel.textContent = t.listening;
+      bubble.innerHTML = '<span class="placeholder">' + t.bubbleListening + '</span>';
+      statusEl.textContent = t.statusListen;
+
+      try{ recognition.start(); }catch(e){}
+
+    }).catch(function(){
+      statusEl.textContent = t.statusMic;
+    });
+  };
+
+  // === Replay ===
+  window.replayRecording = function(){
+    var t = uiText[currentLang];
+    if(!recordedBlob){
+      statusEl.textContent = t.statusNoRec;
+      setTimeout(function(){ statusEl.textContent=''; }, 2000);
+      return;
+    }
+
+    var url = URL.createObjectURL(recordedBlob);
+    var audio = new Audio(url);
+    var rCtx, rAnalyser, rAnimId, rData;
+
+    try{
+      rCtx = new (window.AudioContext || window.webkitAudioContext)();
+      var src = rCtx.createMediaElementSource(audio);
+      rAnalyser = rCtx.createAnalyser();
+      rAnalyser.fftSize = 256;
+      src.connect(rAnalyser);
+      src.connect(rCtx.destination);
+      rData = new Uint8Array(rAnalyser.frequencyBinCount);
+    }catch(e){
+      // Fallback: play without animation
+      audio.play();
+      return;
+    }
+
+    statusEl.textContent = t.statusReplay;
+    replayLabel.textContent = t.replaying;
+    volMeter.classList.add('active');
+
+    function loop(){
+      rAnalyser.getByteFrequencyData(rData);
+      var sum=0;
+      for(var i=0;i<rData.length;i++) sum+=rData[i];
+      var level = Math.min((sum/rData.length)/80, 1);
+      animateChar(level);
+      rAnimId = requestAnimationFrame(loop);
+    }
+
+    var playResult = audio.play();
+    if(playResult && playResult.then){
+      playResult.then(function(){ loop(); }).catch(function(){
+        statusEl.textContent = t.statusError;
+        replayLabel.textContent = t.replay;
+      });
+    } else {
+      loop();
+    }
+
+    audio.onended = function(){
+      if(rAnimId) cancelAnimationFrame(rAnimId);
+      try{ rCtx.close(); }catch(e){}
+      URL.revokeObjectURL(url);
+      resetCharacter();
+      replayLabel.textContent = t.replay;
+      statusEl.textContent = '';
+    };
+  };
+
+  // === TTS ===
+  function stripEmoji(str){
+    try {
+      return str.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu,'').trim();
+    } catch(e) {
+      return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.,!? ]/g,'').trim();
+    }
+  }
+
+  function speakTextFn(text){
+    if(!synth || !text) return;
+    synth.cancel();
+
+    var clean = stripEmoji(text);
+    if(!clean) return;
+
+    var utter = new SpeechSrance(clean);
+    var isEn = (currentLang === 'en');
+    utter.lang = isEn ? 'en-US' : 'ko-KR';
+    utter.rate = isEn ? 0.8 : 0.9;
+    utter.pitch = 1.3;
+
+    var voices = synth.getVoices();
+    var langFull = isEn ? 'en-US' : 'ko-KR';
+    var langPre = isEn ? 'en' : 'ko';
+    var v = voices.find(function(v){ return v.lang===langFull && v.name.toLowerCase().indexOf('female')!==-1; })
+         || voices.find(function(v){ return v.lang===langFull; })
+         || voices.find(function(v){ return v.lang.indexOf(langPre)===0; });
+    if(v) utter.voice = v;
+
+    var t = uiText[currentLang];
+    var c = charEls[currentLang];
+    var ttsAnimId;
+
+    utter.onstart = function(){
+      isSpeaking = true;
+      btnSpeak.classList.add('speaking');
+      speakLabel.textContent = t.speaking;
+      statusEl.textContent = t.statusTalk;
+      function anim(){
+        var now = Date.now();
+        var bounce = Math.sin(now/180)*8;
+        c.char.style.transform = 'translateY('+bounce+'px)';
+        c.mouth.textContent = Math.sin(now/120)>0 ? '○' : 'ω';
+        var ef = Math.sin(now/150)*10;
+        if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
+        if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
+        if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
+        if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
+        ttsAnimId = requestAnimationFrame(anim);
+      }
+      anim();
+    };
+
+    utter.onend = function(){
+     (ttsAnimId) cancelAnimationFrame(ttsAnimId);
+      isSpeaking = false;
+      btnSpeak.classList.remove('speaking');
+      speakLabel.textContent = uiText[currentLang].speak;
+      statusEl.textContent = '';
+      resetCharacter();
+    };
+
+    utter.onerror = function(){
+      if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
+      isSpeaking = false;
+      btnSpeak.classList.remove('speaking');
+      speakLabel.textContent = uiText[currentLang].speak;
+      statusEl.textContent = '';
+      resetCharacter();
+    };
+    synth.speak(utter);
+  }
+
+  window.speakNow = function(){
+    var text = ttsInput.value.trim() || bubble.textContent.trim();
+    var t = uiText[currentLang];
+    if(!text || text.indexOf(t.placeholder.substring(0,6))!==-1 || text.indexOf(t.bubbleListening.substring(0,4))!==-1){
+      statusEl.textContent = t.statusNoInput;
+      setTimeout(function(){ statusEl.textContent=''; }, 2000);
+      return;
+    }
+    bubble.textContent = text;
+    speakTextFn(text);
+  };
+
+  window.speakWord = function(el){
+    var text = el.textContent;
+    bubble.textContent = text;
+    ttsInput.value = text;
+    speakTextFn(text);
+  };
+
+})();
 </script>
 </body>
 </html>

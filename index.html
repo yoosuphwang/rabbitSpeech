@@ -645,13 +645,12 @@ function replayRecording(){
   };
 }
 
-// 에러의 원인이었던 정규표현식을 완전히 ì , 가장 안전한 루프 필터링 방식으로 교체했습니다.
+// 안전하게 수정된 ë
 function stripEmoji(str) {
   if (!str) return '';
   var res = '';
   for (var i = 0; i < str.length; i++) {
     var code = str.charCodeAt(i);
-    // 기본 영어, 숫자, 기호(32~126) + 한글 전체 영역(가~힣, ㄱ~ㅎ, ㅏ~ㅣ)만 통과
     if (
       (code >= 32 && code <= 126) || 
       (code >= 44032 && code <= 55203) || 
@@ -660,14 +659,17 @@ function stripEmoji(str) {
       res += str.charAt(i);
     }
   }
-  return res.trim()ction speakTextFn(text){
+  return res.trim();
+}
+
+function speakTextFn(text){
   if(!synth || !window.SpeechSynthesisUtterance || !text) return;
   synth.cancel();
 
   var clean = stripEmoji(text);
   if(!clean) return;
 
-  var utter = new SpeechSynthesisUtterance(clean);
+ ar utter = new SpeechSynthesisUtterance(clean);
   var isEn = (currentLang === 'en');
   utter.lang = isEn ? 'en-US' : 'ko-KR';
   utter.rate = isEn ? 0.8 : 0.9;
@@ -699,13 +701,13 @@ function stripEmoji(str) {
       if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
       if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
       if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
-    f(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
+      if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
       ttsAnimId = requestAnimationFrame(anim);
     }
     anim();
   };
 
-  utter.onend = function(){
+  ur.onend = function(){
     if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
     isSpeaking = false;
     if(btnSpeak) btnSpeak.classList.remove('speaking');

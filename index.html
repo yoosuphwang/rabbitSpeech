@@ -292,250 +292,249 @@
 </div>
 
 <script>
-(function(){
-  "use strict";
+// 모바일 호환성 극대화를 위해 보호막(IIFE)을 제거하고 전역 스코프로 설정합니다.
+"use strict";
 
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  var synth = window.speechSynthesis;
-  var recognition = null;
-  var isListening = false;
-  var isSpeaking = false;
-  var currentLang = 'ko';
-  var mediaRecorder = null;
-  var audioChunks = [];
-  var recordedBlob = null;
-  var audioCtx = null;
-  var analyser = null;
-  var micStream = null;
-  var animId = null;
-  var groundX = 0;
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+var synth = window.speechSynthesis;
+var recognition = null;
+var isListening = false;
+var isSpeaking = false;
+var currentLang = 'ko';
+var mediaRecorder = null;
+var audioChunks = [];
+var recordedBlob = null;
+var audioCtx = null;
+var analyser = null;
+var micStream = null;
+var animId = null;
+var groundX = 0;
 
-  function $(id){ return document.getElementById(id); }
+function getEl(id){ return document.getElementById(id); }
 
-  var bubble = $('speechBubble');
-  var statusEl = $('status');
-  var ttsInput = $('ttsInput');
-  var btnListen = $('btnListen');
-  var btnSpeak = $('btnSpeak');
-  var btnReplay = $('btnReplay');
-  var listenLabel = $('listenLabel');
-  var speakLabel = $('speakLabel');
-  var replayLabel = $('replayLabel');
-  var volMeter = $('volMeter');
-  var groundLines = $('groundLines');
-  var particlesEl = $('particles');
-  var bars = [0,1,2,3,4].map(function(i){ return $('vb'+i); });
+var bubble = getEl('speechBubble');
+var statusEl = getEl('status');
+var ttsInput = getEl('ttsInput');
+var btnListen = getEl('btnListen');
+var btnSpeak = getEl('btnSpeak');
+var btnReplay = getEl('btnReplay');
+var listenLabel = getEl('listenLabel');
+var speakLabel = getEl('speakLabel');
+var replayLabel = getEl('replayLabel');
+var volMeter = getEl('volMeter');
+var groundLines = getEl('groundLines');
+var particlesEl = getEl('particles');
+var bars = [0,1,2,3,4].map(function(i){ return getEl('vb'+i); });
 
-  var charEls = {
-    ko: { container:$('charBunny'), char:$('bunnyChar'), mouth:$('bunnyMouth'), eyes:$('bunnyEyes'),
-          earL:$('earL'), earR:$('earR'), ribbon:$('ribbon'), hat:null, cheekL:$('bCheekL'), cheekR:$('bCheekR') },
-    en: { container:$('charBear'), char:$('bearChar'), mouth:$('bearMouth'), eyes:$('bearEyes'),
-          earL:$('bearEarL'), earR:$('bearEarR'), ribbon:null, hat:$('bearHat'), cheekL:$('brCheekL'), cheekR:$('brCheekR') }
-  };
+var charEls = {
+  ko: { container:getEl('charBunny'), char:getEl('bunnyChar'), mouth:getEl('bunnyMouth'), eyes:getEl('bunnyEyes'),
+        earL:getEl('earL'), earR:getEl('earR'), ribbon:getEl('ribbon'), hat:null, cheekL:getEl('bCheekL'), cheekR:getEl('bCheekR') },
+  en: { container:getEl('charBear'), char:getEl('bearChar'), mouth:getEl('bearMouth'), eyes:getEl('bearEyes'),
+        earL:getEl('bearEarL'), earR:getEl('bearEarR'), ribbon:null, hat:getEl('bearHat'), cheekL:getEl('brCheekL'), cheekR:getEl('brCheekR') }
+};
 
-  var uiText = {
-    ko: { title:'🐰 토끼와 말해요!', sub:'버튼을 눌러서 이야기해 보세요 💕',
-      placeholder:'여기에 내가 한 말이 나타나요! 🌟',
-      listen:'내 말 듣기', listening:'듣고 있어요...', speak:'말해줘!', speaking:'말하는 중...',
-      replay:'다시 듣기', replaying:'재생 중...',
-      inputLabel:'✏️ 여기에 쓰면 토끼가 읽어줘요!', inputPlaceholder:'읽어줄 말을 써 보세요~',
-      statusListen:'토끼가 귀를 쫑긋! 🐰', statusDone:'잘 들었어요! 🎉', statusTalk:'토끼가 말하고 있어요~ 🗣️',
-      statusNoInput:'먼저 말하거나 글을 써 주세요! ✏️', statusMic:'🎤 마이크를 허용해 주세요!',
-      statusNoSpeech:'소리가 안 들렸어요~ 다시 해볼까요? 🐰', statusError:'앗, 다시 해볼까요? 🌸',
-      bubbleListening:'말해 보세요~ 🎧', statusReplay:'내 목소리를 듣고 있어요! 🎵', statusNoRec:'먼저 녹음해 주세요! 🎤' },
-    en: { title:'🐻 Talk with Bear!', sub:'Press the button and speak English 💙',
-      placeholder:'What you say will appear here! 🌟',
-      listen:'Listen', listening:'Listening...', speak:'Speak!', speaking:'Speaking...',
-      replay:'Replay', replaying:'Playing...',
-      inputLabel:'✏️ Type here and Bear will read it!', inputPlaceholder:'Write something for Bear~',
-      statusListen:'Bear is listening! 🐻', statusDone:'Great job! 🎉', statusTalk:'Bear is talking~ 🗣️',
-      statusNoInput:'Say something or type first! ✏️', statusMic:'🎤 Please allow microphone!',
-      statusNoSpeech:"Couldn't hear you~ Try again? 🐻", statusError:'Oops, try again! 🌸',
-      bubbleListening:'Say something~ 🎧', statusReplay:'Listening to your voice! 🎵', statusNoRec:'Record first! 🎤' }
-  };
+var uiText = {
+  ko: { title:'🐰 토끼와 말해요!', sub:'버튼을 눌러서 이야기해 보세요 💕',
+    placeholder:'여기에 내가 한 말이 나타나요! 🌟',
+    listen:'내 말 듣기', listening:'듣고 있어요...', speak:'말해줘!', speaking:'말하는 중...',
+    replay:'다시 듣기', replaying:'재생 중...',
+    inputLabel:'✏️ 여기에 쓰면 토끼가 읽어줘요!', inputPlaceholder:'읽어줄 말을 써 보세요~',
+    statusListen:'토끼가 귀를 쫑긋! 🐰', statusDone:'잘 들었어요! 🎉', statusTalk:'토끼가 말하고 있어요~ 🗣️',
+    statusNoInput:'먼저 말하거나 글을 써 주세요! ✏️', statusMic:'🎤 마이크를 허용해 주세요!',
+    statusNoSpeech:'소리가 안 들렸어요~ 다시 해볼까요? 🐰', statusError:'앗, 다시 해볼까요? 🌸',
+    bubbleListening:'말해 보세요~ 🎧', statusReplay:'내 목소리를 듣고 있어요! 🎵', statusNoRec:'먼저 녹음해 주세요! 🎤' },
+  en: { title:'🐻 Talk with Bear!', sub:'Press the button and speak English 💙',
+    placeholder:'What you say will appear here! 🌟',
+    listen:'Listen', listening:'Listening...', speak:'Speak!', speaking:'Speaking...',
+    replay:'Replay', replaying:'Playing...',
+    inputLabel:'✏️ Type here and Bear will read it!', inputPlaceholder:'Write something for Bear~',
+    statusListen:'Bear is listening! 🐻', statusDone:'Great job! 🎉', statusTalk:'Bear is talking~ 🗣️',
+    statusNoInput:'Say something or type first! ✏️', statusMic:'🎤 Please allow microphone!',
+    statusNoSpeech:"Couldn't hear you~ Try again? 🐻", statusError:'Oops, try again! 🌸',
+    bubbleListening:'Say something~ 🎧', statusReplay:'Listening to your voice! 🎵', statusNoRec:'Record first! 🎤' }
+};
 
-  var particleEmojis = { ko:['💗','🌸','⭐','✨','🎀','💕'], en:['💙','⭐','✨','🎩','💫','🌟'] };
+var particleEmojis = { ko:['💗','🌸','⭐','✨','🎀','💕'], en:['💙','⭐','✨','🎩','💫','🌟'] };
 
-  // === Voices ===
-  function loadVoices(){ if(synth) synth.getVoices(); }
-  loadVoices();
-  if(synth && synth.onvoiceschanged !== undefined){ synth.onvoiceschanged = loadVoices; }
+function loadVoices(){ if(synth) synth.getVoices(); }
+loadVoices();
+if(synth && synth.onvoiceschanged !== undefined){ synth.onvoiceschanged = loadVoices; }
 
-  // === Language ===
-  window.switchLang = function(lang){
-    if(isSpeaking){ synth.cancel(); resetCharacter(); isSpeaking=false; }
-    if(isListening){ stopListening(); }
-    currentLang = lang;
-    document.body.className = 'theme-' + lang;
-    $('langToggle').className = 'lang-toggle ' + lang;
-    $('btnKo').className = 'lang-btn' + (lang==='ko'?' active-ko':'');
-    $('btnEn').className = 'lang-btn' + (lang==='en'?' active-en':'');
-    charEls.ko.container.className = 'char-container ' + (lang==='ko'?'visible':'hidden');
-    charEls.en.container.className = 'char-container ' + (lang==='en'?'visible':'hidden');
-    var t = uiText[lang];
-    $('headerTitle').textContent = t.title;
-    $('headerSub').textContent = t.sub;
-    bubble.innerHTML = '<span class="placeholder">' + t.placeholder + '</span>';
-    listenLabel.textContent = t.listen;
-    speakLabel.textContent = t.speak;
-    replayLabel.textContent = t.replay;
-    $('inputLabel').textContent = t.inputLabel;
-    ttsInput.placeholder = t.inputPlaceholder;
-    ttsInput.value = '';
-    statusEl.textContent = '';
-    btnListen.classList.remove('recording');
-    btnSpeak.classList.remove('speaking');
-    $('cardsKo').classList.toggle('active', lang==='ko');
-    $('cardsEn').classList.toggle('active', lang==='en');
-    if(recognition) recognition.lang = (lang==='ko') ? 'ko-KR' : 'en-US';
-    recordedBlob = null;
-    audioChunks = [];
-  };
+function switchLang(lang){
+  if(isSpeaking && synth){ synth.cancel(); resetCharacter(); isSpeaking=false; }
+  if(isListening){ stopListening(); }
+  currentLang = lang;
+  document.body.className = 'theme-' + lang;
+  getEl('langToggle').className = 'lang-toggle ' + lang;
+  getEl('btnKo').className = 'lang-btn' + (lang==='ko'?' active-ko':'');
+  getEl('btnEn').className = 'lang-btn' + (lang==='en'?' active-en':'');
+  charEls.ko.container.className = 'char-container ' + (lang==='ko'?'visible':'hidden');
+  charEls.en.container.className = 'char-container ' + (lang==='en'?'visible':'hidden');
+  var t = uiText[lang];
+  getEl('headerTitle').textContent = t.title;
+  getEl('headerSub').textContent = t.sub;
+  if(bubble) bubble.innerHTML = '<span class="placeholder">' + t.placeholder + '</span>';
+  if(listenLabel) listenLabel.textContent = t.listen;
+  if(speakLabel) speakLabel.textContent = t.speak;
+  if(replayLabel) replayLabel.textContent = t.replay;
+  var inLabel = getEl('inputLabel');
+  if(inLabel) inLabel.textContent = t.inputLabel;
+  if(ttsInput) { ttsInput.placeholder = t.inputPlaceholder; ttsInput.value = ''; }
+  if(statusEl) statusEl.textContent = '';
+  if(btnListen) btnListen.classList.remove('recording');
+  if(btnSpeak) btnSpeak.classList.remove('speaking');
+  getEl('cardsKo').classList.toggle('active', lang==='ko');
+  getEl('cardsEn').classList.toggle('active', lang==='en');
+  if(recognition) recognition.lang = (lang==='ko') ? 'ko-KR' : 'en-US';
+  recordedBlob = null;
+  audioChunks = [];
+}
 
-  // === Character Animation Helpers ===
-  function animateChar(level){
-    var c = charEls[currentLang];
-    var now = Date.now();
-    var bounce = Math.sin(now / (200 - level*120)) * (4 + level*16);
-    c.char.style.transform = 'translateY(' + bounce + 'px)';
+function animateChar(level){
+  var c = charEls[currentLang];
+  var now = Date.now();
+  var bounce = Math.sin(now / (200 - level*120)) * (4 + level*16);
+  if(c.char) c.char.style.transform = 'translateY(' + bounce + 'px)';
 
-    var earFlap = Math.sin(now/150) * level * 20;
-    if(c.earL) c.earL.style.transform = 'rotate(' + (-15+earFlap) + 'deg)';
-    if(c.earR) c.earR.style.transform = 'rotate(' + (15-earFlap) + 'deg)';
-    if(c.ribbon) c.ribbon.style.transform = 'rotate(' + (15+Math.sin(now/120)*level*15) + 'deg)';
-    if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate(' + (Math.sin(now/120)*level*12) + 'deg)';
+  var earFlap = Math.sin(now/150) * level * 20;
+  if(c.earL) c.earL.style.transform = 'rotate(' + (-15+earFlap) + 'deg)';
+  if(c.earR) c.earR.style.transform = 'rotate(' + (15-earFlap) + 'deg)';
+  if(c.ribbon) c.ribbon.style.transform = 'rotate(' + (15+Math.sin(now/120)*level*15) + 'deg)';
+  if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate(' + (Math.sin(now/120)*level*12) + 'deg)';
 
-    var blush = 0.4 + level*0.5;
-    c.cheekL.style.opacity = blush;
-    c.cheekR.style.opacity = blush;
+  var blush = 0.4 + level*0.5;
+  if(c.cheekL) c.cheekL.style.opacity = blush;
+  if(c.cheekR) c.cheekR.style.opacity = blush;
 
+  if(c.mouth) {
     c.mouth.textContent = level>0.5 ? '○' : level>0.2 ? 'o' : 'ω';
     c.mouth.style.transform = 'scaleY(' + (1+level*0.8) + ')';
-    c.eyes.textContent = level>0.6 ? '> <' : level>0.3 ? '^ ^' : '• •';
-
-    bars.forEach(function(b,i){
-      b.style.height = (4 + level*(22 + Math.sin(now/100+i*1.2)*8)) + 'px';
-    });
-
-    groundX -= level*6 + 0.5;
-    groundLines.style.transform = 'translateX(' + (groundX%80) + 'px)';
-
-    if(level>0.4 && Math.random()<level*0.3) spawnParticle();
   }
+  if(c.eyes) c.eyes.textContent = level>0.6 ? '> <' : level>0.3 ? '^ ^' : '• •';
 
-  function resetCharacter(){
-    ['ko','en'].forEach(function(l){
-      var c = charEls[l];
-      c.char.style.transform = '';
-      c.mouth.textContent = 'ω';
-      c.mouth.style.transform = '';
-      c.eyes.textContent = '• •';
-      c.cheekL.style.opacity = '';
-      c.cheekR.style.opacity = '';
-      if(c.earL) c.earL.style.transform = '';
-      if(c.earR) c.earR.style.transform = '';
-      if(c.ribbon) c.ribbon.style.transform = 'rotate(15deg)';
-      if(c.hat) c.hat.style.transform = 'translateX(-50%)';
-    });
-    bars.forEach(function(b){ b.style.height='4px'; });
-    groundLines.style.transform = 'translateX(0)';
-    volMeter.classList.remove('active');
+  bars.forEach(function(b,i){
+    if(b) b.style.height = (4 + level*(22 + Math.sin(now/100+i*1.2)*8)) + 'px';
+  });
+
+  groundX -= level*6 + 0.5;
+  if(groundLines) groundLines.style.transform = 'translateX(' + (groundX%80) + 'px)';
+
+  if(level>0.4 && Math.random()<level*0.3) spawnParticle();
+}
+
+function resetCharacter(){
+  ['ko','en'].forEach(function(l){
+    var c = charEls[l];
+    if(c.char) c.char.style.transform = '';
+    if(c.mouth) { c.mouth.textContent = 'ω'; c.mouth.style.transform = ''; }
+    if(c.eyes) c.eyes.textContent = '• •';
+    if(c.cheekL) c.cheekL.style.opacity = '';
+    if(c.cheekR) c.cheekR.style.opacity = '';
+    if(c.earL) c.earL.style.transform = '';
+    if(c.earR) c.earR.style.transform = '';
+    if(c.ribbon) c.ribbon.style.transform = 'rotate(15deg)';
+    if(c.hat) c.hat.style.transform = 'translateX(-50%)';
+  });
+  bars.forEach(function(b){ if(b) b.style.height='4px'; });
+  if(groundLines) groundLines.style.transform = 'translateX(0)';
+  if(volMeter) volMeter.classList.remove('active');
+}
+
+function spawnParticle(){
+  if(!particlesEl) return;
+  var el = document.createElement('div');
+  el.className = 'particle';
+  var emojis = particleEmojis[currentLang];
+  el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  el.style.left = (20+Math.random()*60) + '%';
+  el.style.bottom = '50px';
+  el.style.fontSize = (14+Math.random()*10) + 'px';
+  particlesEl.appendChild(el);
+  var y=0, xd=(Math.random()-0.5)*2, o=1;
+  function rise(){
+    y+=1.5; o-=0.015;
+    el.style.transform = 'translateY(-'+y+'px) translateX('+(xd*y*0.3)+'px)';
+    el.style.opacity = Math.max(0,o);
+    if(o>0) requestAnimationFrame(rise); else el.remove();
   }
+  requestAnimationFrame(rise);
+}
 
-  function spawnParticle(){
-    var el = document.createElement('div');
-    el.className = 'particle';
-    var emojis = particleEmojis[currentLang];
-    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    el.style.left = (20+Math.random()*60) + '%';
-    el.style.bottom = '50px';
-    el.style.fontSize = (14+Math.random()*10) + 'px';
-    particlesEl.appendChild(el);
-    var y=0, xd=(Math.random()-0.5)*2, o=1;
-    function rise(){
-      y+=1.5; o-=0.015;
-      el.style.transform = 'translateY(-'+y+'px) translateX('+(xd*y*0.3)+'px)';
-      el.style.opacity = Math.max(0,o);
-      if(o>0) requestAnimationFrame(rise); else el.remove();
-    }
-    requestAnimationFrame(rise);
+function startAudioAnalysis(stream){
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    var src = audioCtx.createMediaStreamSource(stream);
+    src.connect(analyser);
+  } catch(e){ return; }
+
+  var data = new Uint8Array(analyser.frequencyBinCount);
+  if(volMeter) volMeter.classList.add('active');
+
+  function loop(){
+    if(!analyser) return;
+    analyser.getByteFrequencyData(data);
+    var sum=0;
+    for(var i=0;i<data.length;i++) sum+=data[i];
+    var level = Math.min((sum/data.length)/80, 1);
+    animateChar(level);
+    animId = requestAnimationFrame(loop);
   }
+  loop();
+}
 
-  // === Audio Analysis ===
-  function startAudioAnalysis(stream){
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 256;
-      var src = audioCtx.createMediaStreamSource(stream);
-      src.connect(analyser);
-    } catch(e){ return; }
-
-    var data = new Uint8Array(analyser.frequencyBinCount);
-    volMeter.classList.add('active');
-
-    function loop(){
-      if(!analyser) return;
-      analyser.getByteFrequencyData(data);
-      var sum=0;
-      for(var i=0;i<data.length;i++) sum+=data[i];
-      var level = Math.min((sum/data.length)/80, 1);
-      animateChar(level);
-      animId = requestAnimationFrame(loop);
-    }
-    loop();
+function stopAudioAnalysis(){
+  if(animId){ cancelAnimationFrame(animId); animId=null; }
+  if(audioCtx){
+    try{ audioCtx.close(); }catch(e){}
+    audioCtx=null; analyser=null;
   }
+  resetCharacter();
+}
 
-  function stopAudioAnalysis(){
-    if(animId){ cancelAnimationFrame(animId); animId=null; }
-    if(audioCtx){
-      try{ audioCtx.close(); }catch(e){}
-      audioCtx=null; analyser=null;
-    }
-    resetCharacter();
-  }
-
-  // === Speech Recognition ===
-  if(!SR){
-    $('notSupported').style.display='block';
+if(!SR){
+  var ns = getEl('notSupported');
+  if(ns) ns.style.display='block';
+  if(btnListen){
     btnListen.style.opacity=0.4;
     btnListen.onclick=null;
   }
+} else {
+  recognition = new SR();
+  recognition.lang = 'ko-KR';
+  recognition.interimResults = true;
+  recognition.continuous = false;
 
-  if(SR){
-    recognition = new SR();
-    recognition.lang = 'ko-KR';
-    recognition.interimResults = true;
-    recognition.continuous = false;
+  recognition.onresult = function(e){
+    var tr='';
+    for(var i=0;i<e.results.length;i++) tr += e.results[i][0].transcript;
+    if(bubble) bubble.innerHTML = tr || '<span class="placeholder">' + uiText[currentLang].bubbleListening + '</span>';
+    if(e.results[e.results.length-1].isFinal && ttsInput) ttsInput.value = tr;
+  };
 
-    recognition.onresult = function(e){
-      var tr='';
-      for(var i=0;i<e.results.length;i++) tr += e.results[i][0].transcript;
-      bubble.innerHTML = tr || '<span class="placeholder">' + uiText[currentLang].bubbleListening + '</span>';
-      if(e.results[e.results.length-1].isFinal) ttsInput.value = tr;
-    };
+  recognition.onend = function(){
+    if(isListening) finishListening(uiText[currentLang].statusDone);
+  };
 
-    recognition.onend = function(){
-      if(isListening) finishListening(uiText[currentLang].statusDone);
-    };
+  recognition.onerror = function(e){
+    var t = uiText[currentLang];
+    var msg = t.statusError;
+    if(e.error==='not-allowed') msg = t.statusMic;
+    else if(e.error==='no-speech') msg = t.statusNoSpeech;
+    finishListening(msg);
+  };
+}
 
-    recognition.onerror = function(e){
-      var t = uiText[currentLang];
-      var msg = t.statusError;
-      if(e.error==='not-allowed') msg = t.statusMic;
-      else if(e.error==='no-speech') msg = t.statusNoSpeech;
-      finishListening(msg);
-    };
+function finishListening(msg){
+  isListening = false;
+  if(btnListen) btnListen.classList.remove('recording');
+  if(listenLabel) listenLabel.textContent = uiText[currentLang].listen;
+  if(mediaRecorder && mediaRecorder.state !== 'inactive'){
+    mediaRecorder.stop();
   }
-
-  function finishListening(msg){
-    isListening = false;
-    btnListen.classList.remove('recording');
-    listenLabel.textContent = uiText[currentLang].listen;
-    if(mediaRecorder && mediaRecorder.state !== 'inactive'){
-      mediaRecorder.stop();
-    }
-    stopAudioAnalysis();
+  stopAudioAnalysis();
+  if(statusEl) {
     statusEl.textContent = msg || '';
     if(msg){
       setTimeout(function(){
@@ -543,210 +542,208 @@
       }, 2500);
     }
   }
+}
 
-  function stopListening(){
-    if(recognition){
-      try{ recognition.stop(); }catch(e){}
-    }
-    finishListening('');
+function stopListening(){
+  if(recognition){
+    try{ recognition.stop(); }catch(e){}
   }
+  finishListening('');
+}
 
-  window.toggleListen = function(){
-    if(!recognition) return;
-    if(isListening){ stopListening(); return; }
-    if(isSpeaking){ synth.cancel(); resetCharacter(); isSpeaking=false; }
+function toggleListen(){
+  if(!recognition) return;
+  if(isListening){ stopListening(); return; }
+  if(isSpeaking && synth){ synth.cancel(); resetCharacter(); isSpeaking=false; }
 
-    var t = uiText[currentLang];
+  var t = uiText[currentLang];
 
-    // Request mic
-    navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-      micStream = stream;
-
-      // MediaRecorder for replay
-      audioChunks = [];
-      recordedBlob = null;
-      try{
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = function(e){ if(e.data.size>0) audioChunks.push(e.data); };
-        mediaRecorder.onstop = function(){
-          recordedBlob = new Blob(audioChunks, {type:'audio/webm'});
-          if(micStream){ micStream.getTracks().forEach(function(t){t.stop()}); }
-        };
-        mediaRecorder.start();
-      }catch(e){}
-
-      // Audio analysis for animation
-      startAudioAnalysis(stream);
-
-      // Speech recognition
-      isListening = true;
-      btnListen.classList.add('recording');
-      listenLabel.textContent = t.listening;
-      bubble.innerHTML = '<span class="placeholder">' + t.bubbleListening + '</span>';
-      statusEl.textContent = t.statusListen;
-
-      try{ recognition.start(); }catch(e){}
-
-    }).catch(function(){
-      statusEl.textContent = t.statusMic;
-    });
-  };
-
-  // === Replay ===
-  window.replayRecording = function(){
-    var t = uiText[currentLang];
-    if(!recordedBlob){
-      statusEl.textContent = t.statusNoRec;
-      setTimeout(function(){ statusEl.textContent=''; }, 2000);
-      return;
-    }
-
-    var url = URL.createObjectURL(recordedBlob);
-    var audio = new Audio(url);
-    var rCtx, rAnalyser, rAnimId, rData;
-
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    micStream = stream;
+    audioChunks = [];
+    recordedBlob = null;
     try{
-      rCtx = new (window.AudioContext || window.webkitAudioContext)();
-      var src = rCtx.createMediaElementSource(audio);
-      rAnalyser = rCtx.createAnalyser();
-      rAnalyser.fftSize = 256;
-      src.connect(rAnalyser);
-      src.connect(rCtx.destination);
-      rData = new Uint8Array(rAnalyser.frequencyBinCount);
-    }catch(e){
-      // Fallback: play without animation
-      audio.play();
-      return;
-    }
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = function(e){ if(e.data.size>0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = function(){
+        recordedBlob = new Blob(audioChunks, {type:'audio/webm'});
+        if(micStream){ micStream.getTracks().forEach(function(track){track.stop()}); }
+      };
+      mediaRecorder.start();
+    }catch(e){}
 
-    statusEl.textContent = t.statusReplay;
-    replayLabel.textContent = t.replaying;
-    volMeter.classList.add('active');
+    startAudioAnalysis(stream);
 
-    function loop(){
-      rAnalyser.getByteFrequencyData(rData);
-      var sum=0;
-      for(var i=0;i<rData.length;i++) sum+=rData[i];
-      var level = Math.min((sum/rData.length)/80, 1);
-      animateChar(level);
-      rAnimId = requestAnimationFrame(loop);
-    }
+    isListening = true;
+    if(btnListen) btnListen.classList.add('recording');
+    if(listenLabel) listenLabel.textContent = t.listening;
+    if(bubble) bubble.innerHTML = '<span class="placeholder">' + t.bubbleListening + '</span>';
+    if(statusEl) statusEl.textContent = t.statusListen;
 
-    var playResult = audio.play();
-    if(playResult && playResult.then){
-      playResult.then(function(){ loop(); }).catch(function(){
-        statusEl.textContent = t.statusError;
-        replayLabel.textContent = t.replay;
-      });
-    } else {
-      loop();
-    }
+    try{ recognition.start(); }catch(e){}
 
-    audio.onended = function(){
-      if(rAnimId) cancelAnimationFrame(rAnimId);
-      try{ rCtx.close(); }catch(e){}
-      URL.revokeObjectURL(url);
-      resetCharacter();
-      replayLabel.textContent = t.replay;
-      statusEl.textContent = '';
-    };
-  };
+  }).catch(function(){
+    if(statusEl) statusEl.textContent = t.statusMic;
+  });
+}
 
-  // === TTS ===
-  function stripEmoji(str){
-    try {
-      return str.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu,'').trim();
-    } catch(e) {
-      return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a ]/g,'').trim();
-    }
+function replayRecording(){
+  var t = uiText[currentLang];
+  if(!recordedBlob){
+    if(statusEl) statusEl.textContent = t.statusNoRec;
+    setTimeout(function(){ if(statusEl) statusEl.textContent=''; }, 2000);
+    return;
   }
 
-  function speakTextFn(text){
-    if(!synth || !text) return;
-    synth.cancel();
+  var url = URL.createObjectURL(recordedBlob);
+  var audio = new Audio(url);
+  var rCtx, rAnalyser, rAnimId, rData;
 
-    var clean = stripEmoji(text);
-    if(!clean) return;
-
-    // 오타 수정: SpeechSrance -> SpeechSynthesisUtterance
-    var utter = new SpeechSynthesisUtterance(clean);
-    var isEn = (currentLang === 'en');
-    utter.lang = isEn ? 'en-US' : 'ko-KR';
-    utter.rate = isEn ? 0.8 : 0.9;
-    utter.pitch = 1.3;
-
-    var voices = synth.getVoices();
-    var langFull = isEn ? 'en-US' : 'ko-KR';
-    vre = isEn ? 'en' : 'ko';
-    var v = voices.find(function(v){ return v.lang===langFull && v.name.toLowerCase().indexOf('female')!==-1; })
-         || voices.find(function(v){ return v.lang===langFull; })
-         || voices.find(function(v){ return v.lang.indexOf(langPre)===0; });
-    if(v) utter.voice = v;
-
-    var t = uiText[currentLang];
-    var c = charEls[currentLang];
-    var ttsAnimId;
-
-    utter.onstart = function(){
-      isSpeaking = true;
-      btnSpeak.classList.add('speaking');
-      speakLabel.textContent = t.speaking;
-      statusEl.textContent = t.statusTalk;
-      function anim(){
-        var now = Date.now();
-        var bounce = Math.sin(now/180)*8;
-        c.char.style.transform = 'translateY('+bounce+'px)';
-        c.mouth.textContent = Math.sin(now/120)>0 ? '○' : 'ω';
-        var ef = Math.sin(now/150)*10;
-        if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
-        if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
-        if(c.ribbon) c.ribbon.style.transm = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
-        if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
-        ttsAnimId = requestAnimationFrame(anim);
-      }
-      anim();
-    };
-
-    utter.onend = function(){
-      // 문법 오류 수정: if문 누락
-      if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
-      isSpeaking = false;
-      btnSpeak.classList.remove('speaking');
-      speakLabel.textContent = uiText[currentLang].speak;
-      statusEl.textContent = ''      resetCharacter();
-    };
-
-    utter.onerror = function(){
-      if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
-      isSpeaking = false;
-      btnSpeak.classList.remove('speaking');
-      speakLabel.textContent = uiText[currentLang].speak;
-      statusEl.textContent = '';
-      resetCharacter();
-    };
-    synth.speak(utter);
+  try{
+    rCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var src = rCtx.createMediaElementSource(audio);
+    rAnalyser = rCtx.createAnalyser();
+    rAnalyser.fftSize = 256;
+    src.connect(rAnalyser);
+    src.connect(rCtx.destination);
+    rData = new Uint8Array(rAnalyser.frequencyBinCount);
+  }catch(e){
+    audio.play();
+    return;
   }
 
-  window.speakNow = function(){
-    var text = ttsInput.value.trim() || bubble.textContent.trim();
-    var t = uiText[currentLang];
-    if(!text || text.indexOf(t.placeholder.substring(0,6))!==-1 || text.indexOf(t.bubbleListening.substring(0,4))!==-1){
-      statusEl.textContent = t.statusNoInput;
-      setTimeout(function(){ statusEl.textContent=''; }, 2000);
-      return;
+  if(statusEl) statusEl.textContent = t.statusReplay;
+  if(replayLabel) replayLabel.textContent = t.replaying;
+  if(volMeter) volMeter.classList.add('active');
+
+  function loop(){
+    rAnalyser.getByteFrequencyData(rData);
+    var sum=0;
+    for(var i=0;i<rData.length;i++) sum+=rData[i];
+    var level = Math.min((sum/rData.length)/80, 1);
+    animateChar(level);
+    rAnimId = requestAnimationFrame(loop);
+  }
+
+  var playResult = audio.play();
+  if(playResult && playResult.then){
+    playResult.then(function(){ loop(); }).catch(function(){
+      if(statusEl) statusEl.textContent = t.statusError;
+      if(replayLabel) replayLabel.textContent = t.replay;
+    });
+  } else {
+    loop();
+  }
+
+  audio.onended = function(){
+    if(rAnimId) cancelAnimationFrame(rAnimId);
+    try{ rCtx.close(); }catch(e){}
+    URL.revokeObjectURL(url);
+    resetCharacter();
+    if(replayLabel) replayLabel.textContent = t.replay;
+    if(statusEl) statusEl.textContent = '';
+  };
+}
+
+// 에러 유발 방지: 안전하게 분리한 이모지 제거 함수
+function stripEmoji(str){
+  try {
+    // 최신 모바일 브라우저에서 에러가 발생해도 코드 전체가 다운되지 않도록 우회
+    var rx = new RegExp("[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{FE00}-\\u{FE0F}\\u{1F900}-\\u{1F9FF}\\u{200D}\\u{20E3}\\u{E0020}-\\u{E007F}]", "gu");
+    return str.replace(rx, '').trim();
+  } catch(e) {
+    return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.,/g,'').trim();
+  }
+}
+
+function speakTextFn(text){
+  if(!synth || !window.SpeechSynthesisUtterance || !text) return;
+  synth.cancel();
+
+  var clean = stripEmoji(text);
+  if(!clean) return;
+
+  var utter = new SpeechSynthesisUtterance(clean);
+  var isEn = (currentLang === 'en');
+  utter.lang = isEn ? 'en-US' : 'ko-KR';
+  utter.rate = isEn ? 0.8 : 0.9;
+  utter.pitch = 1.3;
+
+  var voices = synth.getVoices();
+  var langFull = isEn ? 'en-US' : 'ko-KR';
+  var langPre = isEn ? 'en' : 'ko';
+  var v = voices.find(function(v){ return v.lang===langFull && v.name.toLowerCase().indexOf('female')!==-1; })
+       || voices.find(function(v){ return v.lang===langFull; })
+       || voices.find(function(v){ return v.lang.indexOf(langPre)===0; });
+  if(v) utter.voice = v;
+
+  var t = uiText[currentLang];
+  var c = charEls[currentLang];
+  var ttsAnimId;
+
+  utter.onstart = function(){
+    isSpeaking = true;
+    if(btnSpeak) btnSpeak.classList.add('speaking');
+    if(speakLabel) speakLabel.textContent = t.speaking;
+    if(statusEl) statusEl.textContent = t.statusTalk;
+    function anim(){
+      var now = Date.now();
+      var bounce = Math.sin(now/180)*8;
+      if(c.char) c.char.style.transform = 'translateY('+bounce+'px)';
+      if(c.mouth) c.mouth.textContent = Math.sin(now/120)>0 ? '○' : 'ω';
+      var ef = Math.sin(now/150)*10;
+      if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
+      if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
+      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sinw/120)*8)+'deg)';
+      if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
+      ttsAnimId = requestAnimationFrame(anim);
     }
-    bubble.textContent = text;
-    speakTextFn(text);
+    anim();
   };
 
-  window.speakWord = function(el){
-    var text = el.textContent;
-    bubble.textContent = text;
-    ttsInput.value = text;
-    speakTextFn(text);
+  utter.onend = function(){
+    if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
+    isSpeaking = false;
+    if(btnSpeak) btnSpeak.classList.remove('speaking');
+    if(speakLabel) speakLabel.textContent = uiText[currentLang].speak;
+    if(statusEl) statusEl.textContent = '';
+    resetCharacter();
   };
 
-})();
+  utter.onerror = function(){
+    if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
+    isSpeaking = false;
+    if(btnSpeak) btnSpeak.classList.remove('speaking');
+    if(speakLabel) speakLabel.textContent = uiText[currentLang].speak;
+    if(statusEl) statusEl.textContent = '';
+    resetCharacter();
+  };
+  
+  synth.speak(utter);
+}
+
+function speakNow(){
+  var text = '';
+  if(ttsInput && ttsInput.value) text = ttsInput.value.trim();
+  else if(bubble) text = bubble.textContent.trim();
+  
+  var t = uiText[currentLang];
+  if(!text || text.indexOf(t.placeholder.substring(0,6))!==-1 || text.indexOf(t.bubbleListening.substring(0,4))!==-1){
+    if(statusEl) statusEl.textContent = t.statusNoInput;
+    setTimeout(function(){ if(statusEl) statusEl.textContent=''; }, 2000);
+    return;
+  }
+  if(bubble) bubble.textContent = text;
+  speakTextFn(text);
+}
+
+function speakWord(el){
+  var text = el.textContent;
+  if(bubble) bubble.textContent = text;
+  if(ttsInput) ttsInput.value = text;
+  speakTextFn(text);
+}
+
 </script>
 </body>
 </html>

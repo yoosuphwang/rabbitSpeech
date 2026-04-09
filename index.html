@@ -182,6 +182,11 @@
   </div>
   <div class="status" id="status"></div>
 
+  <div class="not-supported" id="notSupported" style="display: none;">
+    앗! 웹 브라우저가 음성 인식을 지원하지 않아요 😢<br>
+    크롬(Chrome)이나 사파리(Safari) 최신 버전을 사용해 주세요!
+  </div>
+
   <div class="btn-row">
     <button class="big-btn btn-listen" id="btnListen" onclick="toggleListen()">
       <span class="icon">🎤</span><span id="listenLabel">내 말 듣기</span>
@@ -652,7 +657,7 @@
     try {
       return str.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu,'').trim();
     } catch(e) {
-      return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.,!? ]/g,'').trim();
+      return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a ]/g,'').trim();
     }
   }
 
@@ -663,7 +668,8 @@
     var clean = stripEmoji(text);
     if(!clean) return;
 
-    var utter = new SpeechSrance(clean);
+    // 오타 수정: SpeechSrance -> SpeechSynthesisUtterance
+    var utter = new SpeechSynthesisUtterance(clean);
     var isEn = (currentLang === 'en');
     utter.lang = isEn ? 'en-US' : 'ko-KR';
     utter.rate = isEn ? 0.8 : 0.9;
@@ -671,7 +677,7 @@
 
     var voices = synth.getVoices();
     var langFull = isEn ? 'en-US' : 'ko-KR';
-    var langPre = isEn ? 'en' : 'ko';
+    vre = isEn ? 'en' : 'ko';
     var v = voices.find(function(v){ return v.lang===langFull && v.name.toLowerCase().indexOf('female')!==-1; })
          || voices.find(function(v){ return v.lang===langFull; })
          || voices.find(function(v){ return v.lang.indexOf(langPre)===0; });
@@ -694,7 +700,7 @@
         var ef = Math.sin(now/150)*10;
         if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
         if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
-        if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
+        if(c.ribbon) c.ribbon.style.transm = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
         if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
         ttsAnimId = requestAnimationFrame(anim);
       }
@@ -702,12 +708,12 @@
     };
 
     utter.onend = function(){
-     (ttsAnimId) cancelAnimationFrame(ttsAnimId);
+      // 문법 오류 수정: if문 누락
+      if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
       isSpeaking = false;
       btnSpeak.classList.remove('speaking');
       speakLabel.textContent = uiText[currentLang].speak;
-      statusEl.textContent = '';
-      resetCharacter();
+      statusEl.textContent = ''      resetCharacter();
     };
 
     utter.onerror = function(){

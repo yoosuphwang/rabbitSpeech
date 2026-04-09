@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>말하는 친구들 🐰🐻</title>
+<link rel="icon" href="data:,">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&display=swap');
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -644,10 +645,10 @@ function replayRecording(){
   };
 }
 
-// 오타 없이 깔끔하게 정리된 이모지 제거 및 TTS 로직
+// 오타가 수정된 정확한 객체명(SpeechSynthesisUtterance) 적용
 function stripEmoji(str){
   if(!str) return '';
-  return str.replace(/[^\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9\s.,!?]/g, '').trim();
+  return str.replace(/[^\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9\s.,rim();
 }
 
 function speakTextFn(text){
@@ -657,7 +658,7 @@ function speakTextFn(text){
   var clean = stripEmoji(text);
   if(!clean) return;
 
-  var utter = new SpeecesisUtterance(clean);
+  var utter = new SpeechSynthesisUtterance(clean);
   var isEn = (currentLang === 'en');
   utter.lang = isEn ? 'en-US' : 'ko-KR';
   utter.rate = isEn ? 0.8 : 0.9;
@@ -688,7 +689,7 @@ function speakTextFn(text){
       var ef = Math.sin(now/150)*10;
       if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
       if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
-      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
+      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)eg)';
       if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
       ttsAnimId = requestAnimationFrame(anim);
     }
@@ -696,7 +697,7 @@ function speakTextFn(text){
   };
 
   utter.onend = function(){
- if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
+    if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
     isSpeaking = false;
     if(btnSpeak) btnSpeak.classList.remove('speaking');
     if(speakLabel) speakLabel.textContent = uiText[currentLang].speak;

@@ -292,7 +292,6 @@
 </div>
 
 <script>
-// 모바일 호환성 극대화를 위해 보호막(IIFE)을 제거하고 전역 스코프로 설정합니다.
 "use strict";
 
 var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -645,15 +644,10 @@ function replayRecording(){
   };
 }
 
-// 에러 유발 방지: 안전하게 분리한 이모지 제거 함수
+// 에러 유발 원인 제거: 가장 기본적이고 안ì 정규식으로 대체 (한글, 영어, 숫자, 기본 기호만 허용)
 function stripEmoji(str){
-  try {
-    // 최신 모바일 브라우저에서 에러가 발생해도 코드 전체가 다운되지 않도록 우회
-    var rx = new RegExp("[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{FE00}-\\u{FE0F}\\u{1F900}-\\u{1F9FF}\\u{200D}\\u{20E3}\\u{E0020}-\\u{E007F}]", "gu");
-    return str.replace(rx, '').trim();
-  } catch(e) {
-    return str.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9.,/g,'').trim();
-  }
+  if(!str) return '';
+  return str.replace(/[^\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9\s.,!?]/g, '').trim();
 }
 
 function speakTextFn(text){
@@ -666,7 +660,7 @@ function speakTextFn(text){
   var utter = new SpeechSynthesisUtterance(clean);
   var isEn = (currentLang === 'en');
   utter.lang = isEn ? 'en-US' : 'ko-KR';
-  utter.rate = isEn ? 0.8 : 0.9;
+  uttesEn ? 0.8 : 0.9;
   utter.pitch = 1.3;
 
   var voices = synth.getVoices();
@@ -692,9 +686,9 @@ function speakTextFn(text){
       if(c.char) c.char.style.transform = 'translateY('+bounce+'px)';
       if(c.mouth) c.mouth.textContent = Math.sin(now/120)>0 ? '○' : 'ω';
       var ef = Math.sin(now/150)*10;
-      if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
+      if(c.earL) c.earL.stytransform = 'rotate('+(-15+ef)+'deg)';
       if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
-      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sinw/120)*8)+'deg)';
+      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
       if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
       ttsAnimId = requestAnimationFrame(anim);
     }

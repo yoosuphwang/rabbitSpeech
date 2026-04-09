@@ -645,7 +645,7 @@ function replayRecording(){
   };
 }
 
-// 안전하게 수정된 ë
+// 안전하게 수정된 루프 기반 이모지 필터링 함수
 function stripEmoji(str) {
   if (!str) return '';
   var res = '';
@@ -707,7 +707,7 @@ function speakTextFn(text){
     anim();
   };
 
-  ur.onend = function(){
+  utter.onend = function(){
     if(ttsAnimId) cancelAnimationFrame(ttsAnimId);
     isSpeaking = false;
     if(btnSpeak) btnSpeak.classList.remove('speaking');

@@ -645,13 +645,22 @@ function replayRecording(){
   };
 }
 
-// 오타가 수정된 정확한 객체명(SpeechSynthesisUtterance) 적용
-function stripEmoji(str){
-  if(!str) return '';
-  return str.replace(/[^\uAC00-\uD7A3\u3131-\u318Ea-zA-Z0-9\s.,rim();
-}
-
-function speakTextFn(text){
+// 에러의 원인이었던 정규표현식을 완전히 ì , 가장 안전한 루프 필터링 방식으로 교체했습니다.
+function stripEmoji(str) {
+  if (!str) return '';
+  var res = '';
+  for (var i = 0; i < str.length; i++) {
+    var code = str.charCodeAt(i);
+    // 기본 영어, 숫자, 기호(32~126) + 한글 전체 영역(가~힣, ㄱ~ㅎ, ㅏ~ㅣ)만 통과
+    if (
+      (code >= 32 && code <= 126) || 
+      (code >= 44032 && code <= 55203) || 
+      (code >= 12593 && code <= 12686)
+    ) {
+      res += str.charAt(i);
+    }
+  }
+  return res.trim()ction speakTextFn(text){
   if(!synth || !window.SpeechSynthesisUtterance || !text) return;
   synth.cancel();
 
@@ -689,8 +698,8 @@ function speakTextFn(text){
       var ef = Math.sin(now/150)*10;
       if(c.earL) c.earL.style.transform = 'rotate('+(-15+ef)+'deg)';
       if(c.earR) c.earR.style.transform = 'rotate('+(15-ef)+'deg)';
-      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)eg)';
-      if(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
+      if(c.ribbon) c.ribbon.style.transform = 'rotate('+(15+Math.sin(now/120)*8)+'deg)';
+    f(c.hat) c.hat.style.transform = 'translateX(-50%) rotate('+(Math.sin(now/120)*8)+'deg)';
       ttsAnimId = requestAnimationFrame(anim);
     }
     anim();

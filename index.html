@@ -669,7 +669,7 @@ function speakTextFn(text){
   var clean = stripEmoji(text);
   if(!clean) return;
 
- ar utter = new SpeechSynthesisUtterance(clean);
+  var utter = new SpeechSynthesisUtterance(clean);
   var isEn = (currentLang === 'en');
   utter.lang = isEn ? 'en-US' : 'ko-KR';
   utter.rate = isEn ? 0.8 : 0.9;
